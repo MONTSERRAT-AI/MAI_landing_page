@@ -23,7 +23,7 @@ export const Footer = () => {
 
                     <div className="flex flex-col items-center md:items-end gap-1 text-xs text-brand-gray-400 text-center md:text-right">
                         <p>&copy; 2026 MONTSERRATAI. NIT. 1.011.083.308-1.</p>
-                        <p>Calle 39 Sur 72 Q 22, Bogotá D.C., Colombia | jcardozor06@gmail.com | +57 3043906303</p>
+                        <p>Bogotá D.C., Colombia | jpcardozo@montserratai.com.co | +57 3043906303</p>
                     </div>
                 </div>
             </div>

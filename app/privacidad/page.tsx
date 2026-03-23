@@ -33,8 +33,7 @@ export default function PrivacidadInfo() {
                                 <li><strong className="text-white">Nombre Comercial:</strong> MONTSERRATAI</li>
                                 <li><strong className="text-white">Propietario:</strong> Cardozo Rivera Juan Pablo</li>
                                 <li><strong className="text-white">NIT:</strong> 1.011.083.308-1</li>
-                                <li><strong className="text-white">Domicilio:</strong> Calle 39 Sur 72 Q 22</li>
-                                <li><strong className="text-white">Correo Electrónico:</strong> jcardozor06@gmail.com</li>
+                                <li><strong className="text-white">Correo Electrónico:</strong> jpcardozo@montserratai.com.co</li>
                                 <li><strong className="text-white">Teléfono:</strong> 3043906303</li>
                             </ul>
                         </section>
@@ -79,7 +78,7 @@ export default function PrivacidadInfo() {
                                 <li>Cancelar o suprimir sus datos cuando no se respeten los principios, derechos y garantías constitucionales y legales.</li>
                                 <li>Oponerse al tratamiento de sus datos para fines específicos.</li>
                             </ul>
-                            <p className="mt-4">Para ejercer estos derechos, puede enviar una solicitud formal al correo: <a href="mailto:jcardozor06@gmail.com" className="text-brand-blue-primary hover:text-white transition-colors">jcardozor06@gmail.com</a>.</p>
+                            <p className="mt-4">Para ejercer estos derechos, puede enviar una solicitud formal al correo: <a href="mailto:jpcardozo@montserratai.com.co" className="text-brand-blue-primary hover:text-white transition-colors">jpcardozo@montserratai.com.co</a>.</p>
                         </section>
 
                         <section>
