@@ -1,0 +1,15 @@
+:root {
+  --page: #eff0f3;
+  --surface: #fff;
+  --ink: #12151b;
+  --dark: #0c0d10;
+  --red: #e60a2f;
+  --red-hover: #ff1f44;
+  --red-text: #d40a2b; /* rojo para texto pequeño sobre fondo claro (AA) */
+  --muted: #4a4d53;
+  --subtle: #65686d;
+  --border: #e1e4e9;
+  --line: #d9dce1;
+  --radius-card: 24px;
+  --radius-field: 12px;
+}
