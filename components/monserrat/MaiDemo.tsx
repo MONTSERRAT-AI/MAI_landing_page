@@ -11,7 +11,7 @@
  * Todos los datos son ficticios (DEMO).
  */
 
-import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import {
   siWhatsapp,
   siInstagram,
@@ -604,6 +604,10 @@ export default function MaiDemo({ controls = true, captions = true }: { controls
   const stageRef = useRef<HTMLDivElement>(null);
   const [layout, setLayout] = useState<Layout>("desktop");
   const [paused, setPaused] = useState(false);
+  // iPhone (Safari iOS) no permite pantalla completa fuera de <video>.
+  const [canFullscreen] = useState(
+    () => typeof document !== "undefined" && document.fullscreenEnabled === true,
+  );
   const clock = useRef({ acc: 0, paused: false, visible: true, reduce: false, layout: "desktop" as Layout, width: 1200 });
   const wmCache = useRef<FrameCtx["wm"]>({ pos: null, layout: null });
 
@@ -611,11 +615,13 @@ export default function MaiDemo({ controls = true, captions = true }: { controls
   const C = CFG[layout];
   const mob = layout === "mobile";
 
-  // Layout por ancho del contenedor + escala del escenario
-  useEffect(() => {
+  // Layout por ancho del contenedor + escala del escenario.
+  // useLayoutEffect: se mide antes del primer pintado para no saltar de
+  // escritorio a móvil (evita layout shift).
+  useLayoutEffect(() => {
     const root = rootRef.current;
     if (!root) return;
-    const ro = new ResizeObserver(() => {
+    const sync = () => {
       const w = root.clientWidth;
       const next: Layout = w < 560 ? "mobile" : "desktop";
       clock.current.width = w;
@@ -626,12 +632,14 @@ export default function MaiDemo({ controls = true, captions = true }: { controls
       }
       const st = stageRef.current;
       if (st) st.style.transform = `scale(${w / CFG[clock.current.layout].W})`;
-    });
+    };
+    sync();
+    const ro = new ResizeObserver(sync);
     ro.observe(root);
     return () => ro.disconnect();
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const st = stageRef.current, root = rootRef.current;
     if (st && root) st.style.transform = `scale(${root.clientWidth / C.W})`;
   }, [C.W]);
@@ -920,7 +928,9 @@ export default function MaiDemo({ controls = true, captions = true }: { controls
             {paused ? "▶" : "❚❚"}
           </button>
           <button type="button" onClick={restart} aria-label="Reiniciar" title="Reiniciar" style={{ ...ctrlBtn, fontSize: 15 }} className="mai-demo-btn">↺</button>
-          <button type="button" onClick={toggleFs} aria-label="Pantalla completa" title="Pantalla completa" style={{ ...ctrlBtn, fontSize: 14 }} className="mai-demo-btn">⛶</button>
+          {canFullscreen && (
+            <button type="button" onClick={toggleFs} aria-label="Pantalla completa" title="Pantalla completa" style={{ ...ctrlBtn, fontSize: 14 }} className="mai-demo-btn">⛶</button>
+          )}
         </div>
       )}
     </div>

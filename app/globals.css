@@ -742,7 +742,7 @@ h3 {
   padding: 24px 0 28px;
 }
 .use-cases .eyebrow {
-  color: var(--red);
+  color: var(--red-text);
 }
 .use-cases h3 {
   font-size: 20px;
@@ -1002,7 +1002,7 @@ h3 {
   letter-spacing: -0.015em;
 }
 .marketing-tab-title > .eyebrow {
-  color: #8a8d93;
+  color: var(--subtle);
   font-size: 12px;
   font-weight: 400;
 }
@@ -1013,16 +1013,17 @@ h3 {
 .marketing-description {
   font-size: 15px;
   line-height: 1.55;
-  color: var(--muted);
-  opacity: 0.55;
-  transition: opacity 0.3s;
+  color: var(--subtle);
+  transition: color 0.3s;
 }
-.marketing-tabs .is-active .marketing-description,
+.marketing-tabs .is-active .marketing-description {
+  color: var(--muted);
+}
 .marketing-tabs .is-active svg {
   opacity: 1;
 }
 .marketing-tabs .is-active .eyebrow {
-  color: var(--red);
+  color: var(--red-text);
 }
 .marketing-preview {
   position: relative;
