@@ -1,0 +1,50 @@
+[
+  {
+    "file": "barberia.webp",
+    "provider": "Unsplash",
+    "source": "https://images.unsplash.com/photo-1503951914875-452162b0f3f1",
+    "note": "Fotografía ilustrativa de un rubro; no representa clientes de MONSERRAT_AI."
+  },
+  {
+    "file": "clinica.webp",
+    "provider": "Unsplash",
+    "source": "https://images.unsplash.com/photo-1516549655169-df83a0774514",
+    "note": "Fotografía ilustrativa de un rubro; no representa clientes de MONSERRAT_AI."
+  },
+  {
+    "file": "ecommerce.webp",
+    "provider": "Unsplash",
+    "source": "https://images.unsplash.com/photo-1472851294608-062f824d29cc",
+    "note": "Fotografía ilustrativa de un rubro; no representa clientes de MONSERRAT_AI."
+  },
+  {
+    "file": "restaurante.webp",
+    "provider": "Unsplash",
+    "source": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4",
+    "note": "Fotografía ilustrativa de un rubro; no representa clientes de MONSERRAT_AI."
+  },
+  {
+    "file": "spa.webp",
+    "provider": "Unsplash",
+    "source": "https://images.unsplash.com/photo-1540555700478-4be289fbecef",
+    "note": "Fotografía ilustrativa de un rubro; no representa clientes de MONSERRAT_AI."
+  },
+  {
+    "file": "gimnasio.webp",
+    "provider": "Unsplash",
+    "source": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48",
+    "note": "Fotografía ilustrativa de un rubro; no representa clientes de MONSERRAT_AI."
+  },
+  {
+    "file": "inmobiliaria.webp",
+    "provider": "Unsplash",
+    "source": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c",
+    "note": "Fotografía ilustrativa de un rubro; no representa clientes de MONSERRAT_AI."
+  },
+  {
+    "file": "academia.webp",
+    "provider": "Unsplash",
+    "source": "https://images.unsplash.com/photo-1524178232363-1fb2b075b655",
+    "note": "Fotografía ilustrativa de un rubro; no representa clientes de MONSERRAT_AI."
+  }
+]

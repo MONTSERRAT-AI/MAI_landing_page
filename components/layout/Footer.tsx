@@ -1,32 +1,41 @@
 import Link from "next/link";
+import { MaiMark } from "@/components/monserrat/MaiMark";
 
-export const Footer = () => {
-    return (
-        <footer className="border-t border-white/5 bg-brand-black/50 backdrop-blur-sm py-12">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-                    <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 rounded bg-gradient-to-tr from-brand-blue-primary to-brand-blue-accent flex items-center justify-center text-white font-bold text-xs">
-                            M
-                        </div>
-                        <span className="font-bold text-sm tracking-tight text-white">
-                            Montserrat<span className="text-brand-blue-primary">AI</span>
-                        </span>
-                    </div>
-
-                    <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 text-sm text-brand-gray-400">
-                        <Link href="/#services" className="hover:text-white transition-colors">Servicios</Link>
-                        <Link href="/#benefits" className="hover:text-white transition-colors">Beneficios</Link>
-                        <Link href="/#cta" className="hover:text-white transition-colors">Contacto</Link>
-                        <Link href="/privacidad" className="hover:text-white transition-colors">Política de Privacidad</Link>
-                    </div>
-
-                    <div className="flex flex-col items-center md:items-end gap-1 text-xs text-brand-gray-400 text-center md:text-right">
-                        <p>&copy; 2026 MONTSERRATAI. NIT. 1.011.083.308-1.</p>
-                        <p>Bogotá D.C., Colombia | jpcardozo@montserratai.com.co | +57 3043906303</p>
-                    </div>
-                </div>
-            </div>
-        </footer>
-    );
-};
+export const Footer = () => (
+  <footer
+    className="site-footer"
+    itemScope
+    itemType="https://schema.org/Organization"
+  >
+    <div className="container">
+      <div className="footer-top">
+        <Link href="/#inicio" className="wordmark">
+          <MaiMark width={24} height={24} />
+          <span itemProp="name">MONSERRAT_AI</span>
+        </Link>
+        <nav className="footer-links" aria-label="Navegación del pie de página">
+          <Link href="/#soluciones">Automatizaciones</Link>
+          <Link href="/#como-trabajamos">Cómo trabajamos</Link>
+          <Link href="/#mas-soluciones">Más servicios</Link>
+          <Link href="/#contacto">Contacto</Link>
+          <Link href="/privacidad">Privacidad</Link>
+        </nav>
+      </div>
+      <div className="footer-bottom">
+        <span>
+          © {new Date().getFullYear()} MONTSERRATAI · NIT 1.011.083.308-1
+        </span>
+        <span>
+          <span itemProp="address">Bogotá D.C., Colombia</span> ·{" "}
+          <a href="mailto:jpcardozo@montserratai.com.co" itemProp="email">
+            jpcardozo@montserratai.com.co
+          </a>{" "}
+          ·{" "}
+          <a href="tel:+573043906303" itemProp="telephone">
+            +57 304 390 6303
+          </a>
+        </span>
+      </div>
+    </div>
+  </footer>
+);

@@ -1,27 +1,52 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
+import { Analytics } from "@/components/Analytics";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_TITLE, SITE_URL } from "@/lib/seo";
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  display: "swap", // Optimize font loading
+const geist = localFont({
+  src: "../public/fonts/geist-latin.woff2",
+  variable: "--font-geist",
+  weight: "100 900",
+  display: "swap",
 });
 
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-mono",
-  subsets: ["latin"],
+const geistMono = localFont({
+  src: "../public/fonts/geist-mono-latin.woff2",
+  variable: "--font-geist-mono",
+  weight: "100 900",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "MontserratAI | Automatización IA para Atención al Cliente",
-  description: "Automatiza procesos repetitivos, reduce tiempos de espera y aumenta ventas con MontserratAI. La solución de IA para soporte al cliente moderno.",
+  metadataBase: new URL(SITE_URL),
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  keywords: [
+    "automatizaciones con IA",
+    "automatización de WhatsApp",
+    "chatbot para negocios",
+    "agente de IA",
+    "CRM",
+    "desarrollo web",
+    "Colombia",
+  ],
+  alternates: { canonical: "/" },
+  icons: { icon: "/icon.svg" },
+  robots: { index: true, follow: true },
   openGraph: {
-    title: "MontserratAI | Automatización IA",
-    description: "Transforma tu atención al cliente con Inteligencia Artificial. Rápido, preciso y 24/7.",
+    title: SITE_TITLE,
+    description: "Automatizaciones con IA a la medida de tu operación.",
+    url: "/",
+    siteName: SITE_NAME,
     type: "website",
-    locale: "es_ES",
+    locale: "es_CO",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: "Automatizaciones con IA a la medida de tu operación.",
   },
 };
 
@@ -31,12 +56,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className="scroll-smooth">
-      <body
-        suppressHydrationWarning
-        className={`${inter.variable} ${jetbrainsMono.variable} bg-brand-black text-foreground antialiased selection:bg-brand-blue-primary/30 min-h-screen`}
-      >
+    <html lang="es">
+      <body className={`${geist.variable} ${geistMono.variable}`}>
         {children}
+        <Analytics />
       </body>
     </html>
   );
