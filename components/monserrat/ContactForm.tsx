@@ -12,7 +12,6 @@ import {
 } from "@/lib/contact";
 import { MaiMark } from "./MaiMark";
 import { track } from "@/lib/analytics";
-import { WHATSAPP_URL } from "@/lib/site-content";
 
 export default function ContactForm() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -163,7 +162,7 @@ export default function ContactForm() {
           </div>
           <div className="contact-direct">
             <a
-              href={WHATSAPP_URL}
+              href="https://wa.me/573043906303"
               target="_blank"
               rel="noopener noreferrer"
             >

@@ -75,9 +75,8 @@ Todos los eventos pasan por `track()` en `lib/analytics.ts`, que los envía a GA
 
 | Evento | Parámetros | Cuándo |
 | --- | --- | --- |
-| `cta_click` | `location` (`hero`, `header` —solo aparece al pasar el inicio—, `header_mobile`, `solucion-*`, `como-trabajamos`, `faq`), `subject` | CTA principal “Cuéntanos qué necesitas” |
+| `cta_click` | `location` (`hero`, `header`, `header_mobile`, `solucion-*`, `como-trabajamos`, `faq`), `subject` | CTA principal “Cuéntanos qué necesitas” |
 | `secondary_cta_click` | `location` | “Ver cómo funciona” |
-| `whatsapp_click` | `location` (`header`, `header_mobile`) | “Escríbenos por WhatsApp” en la navegación |
 | `journey_step` | `step` | Pasos del recorrido “Cómo funciona” |
 | `service_inquiry` | `subject` | Botones “Consultar por…” |
 | `contact_submit` | `subject` | Formulario enviado con éxito |

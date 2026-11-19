@@ -14,9 +14,6 @@ export const hero = {
 /** Texto del CTA principal: el mismo en inicio, navegación, soluciones y cierre. */
 export const PRIMARY_CTA = hero.primaryCta;
 
-/** Contacto directo por WhatsApp (mismo número del pie de página). */
-export const WHATSAPP_URL = "https://wa.me/573043906303";
-
 export type Solution = {
   id: string;
   label: string;
