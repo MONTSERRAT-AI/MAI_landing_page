@@ -618,7 +618,9 @@ function applyFrame(real: number, ctx: FrameCtx) {
     wm.style.top = wmY + "px";
     wm.style.opacity = (seg(t, 17.0, 17.7) * FIN).toFixed(3);
     wm.style.transform = `translateY(${((1 - seg(t, 17.0, 17.7)) * 20).toFixed(1)}px)`;
-    if (!ctx.wm.pos || ctx.wm.layout !== layout) {
+    // Se mide de nuevo en cada ciclo, justo antes de que se junten M·A·I
+    // (17.2 s → 18.2 s), para no usar posiciones de otro tamaño de letra.
+    if (!ctx.wm.pos || ctx.wm.layout !== layout || (t > 17.2 && t < 18.2)) {
       const ws = WM.map((_, i) => g("w" + i));
       if (ws.every(Boolean) && ws[0]!.offsetWidth) {
         const lefts = ws.map((e) => e!.offsetLeft), widths = ws.map((e) => e!.offsetWidth);
