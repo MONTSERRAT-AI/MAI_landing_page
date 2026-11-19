@@ -1,13 +1,15 @@
 import Header from "@/components/monserrat/Header";
 import Hero from "@/components/monserrat/Hero";
 import {
-  AudienceMarquee,
-  Problems,
-  AutomationFlow,
+  CaseStudies,
+  Faq,
+  PlatformBlock,
   Process,
   ServicesBento,
+  Solutions,
 } from "@/components/monserrat/LandingSections";
-import MarketingScroll from "@/components/monserrat/MarketingScroll";
+import Journey from "@/components/monserrat/Journey";
+import Marketing from "@/components/monserrat/Marketing";
 import ContactForm from "@/components/monserrat/ContactForm";
 import { Footer } from "@/components/layout/Footer";
 import { structuredData } from "@/lib/seo";
@@ -27,12 +29,15 @@ export default function Home() {
       />
       <main id="contenido">
         <Hero />
-        <AudienceMarquee />
-        <Problems />
-        <AutomationFlow />
-        <MarketingScroll />
+        <CaseStudies />
+        <Solutions />
+        <Journey>
+          <PlatformBlock />
+        </Journey>
         <Process />
+        <Marketing />
         <ServicesBento />
+        <Faq />
         <ContactForm />
       </main>
       <Footer />

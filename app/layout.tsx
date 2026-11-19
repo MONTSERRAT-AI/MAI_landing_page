@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
   openGraph: {
     title: SITE_TITLE,
-    description: "Automatizaciones con IA a la medida de tu operación.",
+    description: SITE_DESCRIPTION,
     url: "/",
     siteName: SITE_NAME,
     type: "website",
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: SITE_TITLE,
-    description: "Automatizaciones con IA a la medida de tu operación.",
+    description: SITE_DESCRIPTION,
   },
 };
 

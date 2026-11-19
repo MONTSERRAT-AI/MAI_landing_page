@@ -152,6 +152,14 @@ export default function ContactForm() {
             problema con tus palabras y te responderemos para conversar sobre
             cómo resolverlo.
           </p>
+          <div className="contact-next">
+            <span className="eyebrow">QUÉ PASA DESPUÉS</span>
+            <ol>
+              <li>Leemos tu mensaje.</li>
+              <li>Te contactamos por el medio que nos dejes para conversar.</li>
+              <li>Si tiene sentido avanzar, te proponemos el alcance.</li>
+            </ol>
+          </div>
           <div className="contact-direct">
             <a
               href="https://wa.me/573043906303"

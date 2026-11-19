@@ -1,13 +1,27 @@
 // Datos de SEO y datos estructurados (schema.org) del sitio.
 
+/**
+ * URL pública usada en canonical, Open Graph, sitemap y JSON-LD.
+ * Prioridad:
+ * 1. NEXT_PUBLIC_SITE_URL (definirla cuando el dominio propio sirva la landing).
+ * 2. RAILWAY_PUBLIC_DOMAIN (dominio que Railway asigna al servicio).
+ * 3. Dominio propio por defecto.
+ * Así la canonical no apunta a un dominio que todavía no responde.
+ */
+const fromRailway = process.env.RAILWAY_PUBLIC_DOMAIN
+  ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`
+  : "";
 export const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL || "https://montserratai.com.co"
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  fromRailway ||
+  "https://montserratai.com.co"
 ).replace(/\/$/, "");
 
 export const SITE_NAME = "MONSERRAT_AI";
-export const SITE_TITLE = "MONSERRAT_AI · Menos tareas. Más negocio.";
+export const SITE_TITLE =
+  "MONSERRAT_AI · Automatiza la atención, las reservas y el seguimiento";
 export const SITE_DESCRIPTION =
-  "Automatizaciones con IA a la medida de tu operación. Conectamos ventas, atención, pedidos, agenda y herramientas para que tu equipo deje de hacerlo todo a mano.";
+  "Conectamos tus mensajes, tu agenda y tus herramientas con soluciones de IA adaptadas a tu operación. Menos tareas. Más negocio.";
 
 const ORG_ID = `${SITE_URL}/#organization`;
 

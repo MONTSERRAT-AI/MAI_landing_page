@@ -1,87 +1,33 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { ArrowUpRight, Play, Star } from "lucide-react";
 import { marketing } from "@/lib/site-content";
 import { Eyebrow } from "./Eyebrow";
 
-export default function MarketingScroll() {
-  const section = useRef<HTMLElement>(null);
-  const lineRefs = useRef<(HTMLSpanElement | null)[]>([]);
+/** Presencia y marketing, en formato compacto (pestañas, sin scroll fijo). */
+export default function Marketing() {
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const [active, setActive] = useState(0);
-  useEffect(() => {
-    let frame = 0;
-    const media = window.matchMedia(
-      "(min-width: 900px) and (prefers-reduced-motion: no-preference)",
-    );
-    const update = () => {
-      frame = 0;
-      const el = section.current;
-      if (!el || !media.matches) return;
-      const p = Math.min(
-        0.999,
-        Math.max(
-          0,
-          -el.getBoundingClientRect().top /
-            Math.max(1, el.offsetHeight - window.innerHeight),
-        ),
-      );
-      setActive(Math.floor(p * 3));
-      lineRefs.current.forEach((line, i) => {
-        if (line)
-          line.style.transform = `scaleX(${Math.min(1, Math.max(0, p * 3 - i))})`;
-      });
-    };
-    const requestUpdate = () => {
-      if (!frame) frame = window.requestAnimationFrame(update);
-    };
-    window.addEventListener("scroll", requestUpdate, { passive: true });
-    window.addEventListener("resize", requestUpdate);
-    media.addEventListener("change", requestUpdate);
-    update();
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", requestUpdate);
-      window.removeEventListener("resize", requestUpdate);
-      media.removeEventListener("change", requestUpdate);
-    };
-  }, []);
-  const select = (i: number) => {
-    setActive(i);
-    if (
-      window.matchMedia(
-        "(min-width: 900px) and (prefers-reduced-motion: no-preference)",
-      ).matches &&
-      section.current
-    ) {
-      const el = section.current;
-      window.scrollTo({
-        top:
-          window.scrollY +
-          el.getBoundingClientRect().top +
-          ((el.offsetHeight - window.innerHeight) * (i + 0.5)) / 3,
-        behavior: "smooth",
-      });
-    }
-  };
+  const select = (i: number) => setActive(i);
   return (
     <section
       className="marketing-section"
       id="marketing"
-      ref={section}
       aria-labelledby="marketing-heading"
     >
-      <div className="container marketing-sticky">
+      <div className="container section-stack">
         <div className="section-intro">
           <div>
             <Eyebrow>PRESENCIA Y MARKETING</Eyebrow>
-            <h2 id="marketing-heading">También ordenamos tu marketing</h2>
+            <h2 id="marketing-heading" className="heading-medium">
+              Tu marketing, conectado con tus conversaciones
+            </h2>
           </div>
           <p>
-            Tu página de reservas, tus reseñas y tus campañas de Meta,
-            conectadas con tus conversaciones. Así sabes qué anuncio trae
-            clientes y dónde terminan reservando.
+            Tu página de reservas, tus reseñas y tus campañas de Meta se
+            conectan con la plataforma. Así sabes qué anuncio trae clientes y
+            dónde terminan reservando.
           </p>
         </div>
         <div className="marketing-layout">
@@ -118,12 +64,6 @@ export default function MarketingScroll() {
                   tabRefs.current[next]?.focus({ preventScroll: true });
                 }}
               >
-                <span
-                  ref={(el) => {
-                    lineRefs.current[i] = el;
-                  }}
-                  className="marketing-progress"
-                />
                 <span className="marketing-tab-title">
                   <span className="eyebrow">0{i + 1}</span>
                   {title}
@@ -223,6 +163,13 @@ export default function MarketingScroll() {
             </div>
           </div>
         </div>
+        <p className="marketing-scope">
+          <strong>Qué incluye:</strong> conectar estas piezas con la plataforma
+          para ver de dónde llegan tus clientes. Crear un sitio web completo o
+          trabajar tu visibilidad en buscadores son{" "}
+          <a href="#mas-soluciones">servicios complementarios</a> que se cotizan
+          aparte.
+        </p>
       </div>
     </section>
   );

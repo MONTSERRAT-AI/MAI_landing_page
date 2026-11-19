@@ -14,9 +14,11 @@ export const Footer = () => (
           <span itemProp="name">MONSERRAT_AI</span>
         </Link>
         <nav className="footer-links" aria-label="Navegación del pie de página">
-          <Link href="/#soluciones">Automatizaciones</Link>
+          <Link href="/#soluciones">Soluciones</Link>
+          <Link href="/#como-funciona">Cómo funciona</Link>
           <Link href="/#como-trabajamos">Cómo trabajamos</Link>
-          <Link href="/#mas-soluciones">Más servicios</Link>
+          <Link href="/#mas-soluciones">Servicios</Link>
+          <Link href="/#preguntas">Preguntas</Link>
           <Link href="/#contacto">Contacto</Link>
           <Link href="/privacidad">Privacidad</Link>
         </nav>
