@@ -8,25 +8,52 @@ import { track } from "@/lib/analytics";
 import { Eyebrow } from "./Eyebrow";
 import { MaiMark } from "./MaiMark";
 
-const NAV = ["Inbox", "Agenda", "Contactos", "Resultados"];
-const NAV_FOR_STEP = [0, 0, 1, 2, 3];
+const NAV = ["Inbox", "Agenda", "Pipeline", "Ventas", "Clientes"];
+const NAV_FOR_STEP = [0, 0, 1, 2, 3, 4];
+const PIPE = ["Contacto", "Reserva", "Asistencia", "Pago"];
+
+function Pipe({ at }: { at: number }) {
+  return (
+    <div className="jx-pipe" aria-hidden="true">
+      {PIPE.map((p, i) => (
+        <span key={p} className={i < at ? "is-done" : i === at ? "is-now" : ""}>
+          {i < at && <Check size={11} />}
+          {p}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+function ContactHead({ tag, sub }: { tag?: ReactNode; sub: ReactNode }) {
+  return (
+    <div className="jx-chat-head">
+      <span className="jx-avatar">LM</span>
+      <div>
+        <strong>Laura M.</strong>
+        <small>{sub}</small>
+      </div>
+      {tag}
+    </div>
+  );
+}
+
+const whatsapp = (
+  <>
+    <Image src="/channels/whatsapp.svg" alt="" width={11} height={11} />
+    WhatsApp
+  </>
+);
 
 /** Pantalla de la plataforma para cada paso (datos ficticios). */
 function StepScreen({ step }: { step: number }) {
   if (step <= 1) {
     return (
       <div className="jx-chat">
-        <div className="jx-chat-head">
-          <span className="jx-avatar">LM</span>
-          <div>
-            <strong>Laura M.</strong>
-            <small>
-              <Image src="/channels/whatsapp.svg" alt="" width={11} height={11} />
-              WhatsApp
-            </small>
-          </div>
-          {step === 1 && <span className="jx-tag">Respondido por MAI</span>}
-        </div>
+        <ContactHead
+          sub={whatsapp}
+          tag={step === 1 ? <span className="jx-tag">Atendido por MAI</span> : undefined}
+        />
         <div className="jx-thread">
           <span className="jx-in">Hola, ¿tienen cita el sábado en la mañana?</span>
           {step === 1 ? (
@@ -47,6 +74,11 @@ function StepScreen({ step }: { step: number }) {
           <span>Escribe un mensaje…</span>
           <span className="jx-takeover">Tomar conversación</span>
         </div>
+        {step === 1 && (
+          <small className="jx-note">
+            Si la tomas, se la devuelves a MAI cuando termines.
+          </small>
+        )}
       </div>
     );
   }
@@ -56,7 +88,7 @@ function StepScreen({ step }: { step: number }) {
         <div className="jx-agenda-head">
           <CalendarDays size={16} aria-hidden="true" />
           <strong>Sábado</strong>
-          <small>Agenda del estudio</small>
+          <small>Sede Chapinero · Sofía</small>
         </div>
         {[
           ["9:00", "Libre", ""],
@@ -80,49 +112,57 @@ function StepScreen({ step }: { step: number }) {
   if (step === 3) {
     return (
       <div className="jx-contact">
-        <div className="jx-chat-head">
-          <span className="jx-avatar">LM</span>
-          <div>
-            <strong>Laura M.</strong>
-            <small>Cliente desde hoy</small>
-          </div>
-          <span className="jx-stage">Agendado</span>
-        </div>
+        <ContactHead
+          sub="Sábado 10:00 · Limpieza facial"
+          tag={<span className="jx-stage jx-stage-green">Asistió</span>}
+        />
+        <Pipe at={2} />
         <ul className="jx-tasks">
           <li className="is-done">
             <Check size={14} aria-hidden="true" />
-            Confirmación enviada
+            Recordatorio enviado el viernes
           </li>
-          <li>
-            <Bell size={14} aria-hidden="true" />
-            Recordatorio · viernes 6:00 p. m.
-          </li>
-          <li>
-            <UserRound size={14} aria-hidden="true" />
-            Próximo paso · ofrecer nueva cita después de la visita
+          <li className="is-done">
+            <Check size={14} aria-hidden="true" />
+            Asistencia marcada por el equipo
           </li>
         </ul>
       </div>
     );
   }
+  if (step === 4) {
+    return (
+      <div className="jx-contact">
+        <ContactHead
+          sub="Venta registrada"
+          tag={<span className="jx-stage jx-stage-green">Pagado</span>}
+        />
+        <Pipe at={4} />
+        <div className="jx-sale">
+          <span>Limpieza facial</span>
+          <strong>$85.000</strong>
+          <small>Método: tarjeta · Registrado hoy</small>
+        </div>
+      </div>
+    );
+  }
   return (
-    <div className="jx-results">
-      <div className="jx-metrics">
-        <div>
-          <span>Reservas de la semana</span>
-          <strong>12</strong>
-        </div>
-        <div>
-          <span>Conversaciones atendidas</span>
-          <strong>86</strong>
-        </div>
-      </div>
-      <div className="jx-bars" aria-hidden="true">
-        {[38, 52, 46, 64, 58, 80, 72].map((v, i) => (
-          <span key={i} style={{ height: `${v}%` }} className={i === 5 ? "is-top" : ""} />
-        ))}
-      </div>
-      <small>WhatsApp 58% · Instagram 24% · Web 18%</small>
+    <div className="jx-contact">
+      <ContactHead sub="Cliente · 1 visita" tag={<span className="jx-stage">Cliente</span>} />
+      <ul className="jx-tasks">
+        <li className="is-done">
+          <Check size={14} aria-hidden="true" />
+          Nota: prefiere sábados en la mañana
+        </li>
+        <li>
+          <Bell size={14} aria-hidden="true" />
+          Seguimiento · mensaje después de la visita
+        </li>
+        <li>
+          <UserRound size={14} aria-hidden="true" />
+          Próximo paso · ofrecer nueva cita en 30 días
+        </li>
+      </ul>
     </div>
   );
 }
@@ -152,9 +192,9 @@ export default function Journey({ children }: { children?: ReactNode }) {
             </h2>
           </div>
           <p>
-            MAI hace los pasos repetitivos y tu equipo puede intervenir en
-            cualquier momento. Así se ve un caso típico en nuestra plataforma,
-            del primer mensaje al resultado.
+            MAI hace los pasos repetitivos. Cuando necesita ayuda te avisa, tu
+            equipo responde y le devuelve el control. Así se ve un caso típico
+            en nuestra plataforma.
           </p>
         </div>
 

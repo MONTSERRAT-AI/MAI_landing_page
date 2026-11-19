@@ -31,9 +31,9 @@ export const solutions: Solution[] = [
     situation:
       "Respondes las mismas preguntas por WhatsApp todo el día y algunos clientes que preguntaron nunca reciben seguimiento.",
     automate:
-      "Atención por mensajes para consultas frecuentes sobre productos, precios, horarios y envíos, y registro de cada oportunidad con su estado y su próximo paso.",
+      "MAI atiende las consultas frecuentes en tus canales y cada oportunidad avanza en el pipeline con su ficha, su historial y su próximo paso.",
     change:
-      "Tu equipo atiende lo que necesita criterio humano y sabe en qué va cada cliente sin depender de la memoria.",
+      "MAI te avisa cuando necesita ayuda: tu equipo responde, le devuelve el control y se enfoca en lo que necesita criterio humano.",
   },
   {
     id: "reservar",
@@ -42,18 +42,18 @@ export const solutions: Solution[] = [
     situation:
       "Agendar, confirmar y reprogramar citas te quita horas, y los mensajes que llegan de noche esperan hasta el día siguiente.",
     automate:
-      "Tus clientes consultan disponibilidad y reservan; la cita queda en la agenda y reciben confirmación y recordatorio.",
+      "Tus clientes consultan disponibilidad y reservan según empleados, sedes y horarios; la cita queda en la agenda con confirmación y recordatorio.",
     change:
-      "El equipo ve la agenda al día y dedica su tiempo a atender, no a coordinar por chat.",
+      "El equipo ve la agenda al día, marca la asistencia y dedica su tiempo a atender, no a coordinar por chat.",
   },
   {
     id: "conectar",
     label: "CONECTAR LA OPERACIÓN",
-    title: "Tus herramientas compartiendo datos, sin copiar y pegar",
+    title: "Tu tienda, tus envíos y tus herramientas, conectados",
     situation:
       "Copias datos a mano entre herramientas que no se hablan entre sí y tus clientes preguntan todo el día dónde está su pedido.",
     automate:
-      "Según el alcance de cada proyecto: pedidos que avisan al cliente, datos que pasan entre tienda, planillas, CRM y facturación, y reportes de lo que hace cada automatización.",
+      "Automatizaciones a medida de tu operación: pedidos que avisan al cliente de su envío y datos que pasan solos entre tu tienda, planillas, CRM y otras aplicaciones. Las definimos y construimos según tu caso.",
     change:
       "Menos tareas manuales y la información de tu operación en un solo lugar.",
   },
@@ -80,52 +80,76 @@ export type JourneyStep = {
   mai: string;
 };
 
-/** Recorrido de la demostración: mensaje → respuesta → reserva → seguimiento → resultado. */
+/**
+ * Recorrido de la demostración, igual al flujo real de la plataforma:
+ * mensaje → atención → reserva → asistencia → pago → seguimiento.
+ * El pago se REGISTRA en la plataforma; no se procesa dinero.
+ */
 export const journey: JourneyStep[] = [
   {
     id: "mensaje",
     label: "Mensaje",
     title: "Llega una consulta",
-    system:
-      "La conversación entra a la bandeja junto con las de tus otros canales.",
+    system: "La conversación entra al Inbox junto con las de tus otros canales.",
     team: "Ve todas las conversaciones en un solo lugar.",
     mai: "Llegó un mensaje nuevo por WhatsApp.",
   },
   {
-    id: "respuesta",
-    label: "Respuesta",
-    title: "MAI responde",
+    id: "atencion",
+    label: "Atención",
+    title: "MAI atiende",
     system:
-      "Responde con la información y las reglas de tu negocio y ofrece los horarios disponibles.",
-    team: "Puede leer la conversación y continuarla cuando lo necesite.",
+      "Responde con la información de tu negocio y ofrece los horarios disponibles. Si necesita ayuda, te avisa.",
+    team: "Toma la conversación cuando quiera y luego le devuelve el control a MAI.",
     mai: "Le ofrezco los horarios libres del sábado.",
   },
   {
     id: "reserva",
     label: "Reserva",
     title: "La cita queda agendada",
-    system: "Crea la reserva en la agenda y envía la confirmación.",
-    team: "Ve la cita en la agenda y puede moverla si hace falta.",
+    system:
+      "Crea la reserva según la disponibilidad del empleado y la sede, y envía la confirmación.",
+    team: "Ve la cita en la Agenda y puede moverla si hace falta.",
     mai: "Reserva creada y confirmada.",
+  },
+  {
+    id: "asistencia",
+    label: "Asistencia",
+    title: "El cliente llega",
+    system: "Envía el recordatorio y la oportunidad avanza en el Pipeline.",
+    team: "Marca la asistencia desde la Agenda.",
+    mai: "Recordatorio enviado el viernes.",
+  },
+  {
+    id: "pago",
+    label: "Pago",
+    title: "La venta queda registrada",
+    system: "El pago queda registrado con su método y su importe en Ventas y cobros.",
+    team: "Registra el pago o hace un ajuste desde la plataforma.",
+    mai: "Venta registrada en el historial de Laura.",
   },
   {
     id: "seguimiento",
     label: "Seguimiento",
     title: "Nada queda pendiente",
     system:
-      "Actualiza el contacto, programa el recordatorio y deja el próximo paso registrado.",
-    team: "Sabe en qué etapa está cada cliente.",
-    mai: "Recordatorio programado para el viernes.",
+      "Actualiza la ficha del cliente con su historial y deja el próximo paso registrado.",
+    team: "Sabe en qué va cada cliente y qué sigue.",
+    mai: "Próximo paso agendado para Laura.",
   },
-  {
-    id: "resultado",
-    label: "Resultado",
-    title: "Ves qué está funcionando",
-    system:
-      "Registra reservas, conversaciones atendidas y de qué canal llega cada cliente.",
-    team: "Revisa los resultados para decidir dónde enfocar el esfuerzo.",
-    mai: "Así va tu semana.",
-  },
+];
+
+/** Módulos que existen hoy en la plataforma. Cada negocio accede según su plan. */
+export const platformModules: [string, string][] = [
+  ["Inbox", "Conversaciones de todos tus canales; MAI avisa cuando necesita ayuda."],
+  ["Clientes", "Fichas, historial, notas, etiquetas y seguimiento."],
+  ["Pipeline", "Oportunidades desde el contacto hasta la reserva, la asistencia y el pago."],
+  ["Agenda", "Citas, disponibilidad, empleados, sedes, horarios y ausencias."],
+  ["Catálogo", "Servicios, productos, precios y promociones."],
+  ["Ventas y cobros", "Registro de pagos, métodos y ajustes."],
+  ["Presencia y marketing", "Página de reservas, reseñas y origen de tus campañas."],
+  ["Resultados", "Actividad de MAI y del equipo, reservas, conversión, importes y costos de IA."],
+  ["Automatizaciones", "Flujos con n8n que envían información a otras aplicaciones."],
 ];
 
 export const process = [
@@ -151,13 +175,13 @@ export const process = [
 export const engagement = {
   uses: {
     title: "Lo que usas",
-    text: "La plataforma de MONSERRAT_AI: mensajes, agenda, contactos, seguimiento y resultados en un solo panel.",
+    text: "La plataforma de MONSERRAT_AI con los módulos de tu plan: Inbox, clientes, pipeline, agenda, catálogo, ventas y cobros, presencia y marketing, y resultados.",
   },
   weDo: {
     title: "Lo que hacemos nosotros",
     items: [
       "Configuramos la plataforma para tu negocio.",
-      "Construimos las automatizaciones que acordamos.",
+      "Construimos las automatizaciones que acordamos, también las de tu tienda y tus envíos.",
       "Conectamos tus canales y herramientas.",
       "Probamos con casos reales de tu operación.",
       "Te mostramos cómo usarla.",
@@ -209,11 +233,11 @@ export const faqs: Faq[] = [
   },
   {
     q: "¿Se puede conectar con mis herramientas?",
-    a: "Conectamos la solución con tus canales y herramientas, como tu tienda, planillas, CRM o facturación. Qué se integra y cómo se revisa con cada herramienta al definir el alcance.",
+    a: "Sí. Si tu tienda, tu sistema de envíos u otra herramienta tiene una forma de conectarse, como una API o un webhook, lo integramos con automatizaciones a medida. Lo revisamos al definir el alcance.",
   },
   {
     q: "¿Mi equipo puede intervenir en las conversaciones?",
-    a: "Sí. Las conversaciones quedan en la bandeja de la plataforma y tu equipo puede revisarlas y continuarlas cuando lo necesite.",
+    a: "Sí. MAI detecta cuándo necesita ayuda y te avisa. Tu equipo responde desde el Inbox y, cuando termina, le devuelve el control a MAI.",
   },
   {
     q: "¿Cómo se define qué automatizar?",
@@ -221,7 +245,7 @@ export const faqs: Faq[] = [
   },
   {
     q: "¿Cómo se cotiza?",
-    a: "Cada proyecto se cotiza según su alcance. Si la solución usa herramientas o proveedores externos con costo propio, te lo indicamos en la propuesta.",
+    a: "Cada proyecto se cotiza según su alcance. Si la solución usa herramientas o proveedores externos con costo propio, te lo indicamos en la propuesta, y en el panel puedes ver la actividad y los costos de IA.",
   },
   {
     q: "¿Qué acompañamiento existe después de implementar?",

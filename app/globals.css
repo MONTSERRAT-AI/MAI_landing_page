@@ -2001,7 +2001,7 @@ h3 {
 }
 .journey-steps {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 8px;
 }
 .journey-steps button {
@@ -2633,4 +2633,123 @@ h3 {
   color: var(--red);
   font-family: var(--font-geist-mono), monospace;
   font-size: 0.85em;
+}
+
+/* Recorrido: etapas del pipeline y venta registrada */
+.jx-pipe {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.jx-pipe span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--subtle);
+  font-size: 11px;
+}
+.jx-pipe .is-done {
+  border-color: #b9e0c1;
+  background: #e3f4e6;
+  color: #1e6b34;
+}
+.jx-pipe .is-now {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: white;
+}
+.jx-stage-green {
+  background: #e3f4e6;
+  color: #1e6b34;
+}
+.jx-sale {
+  display: grid;
+  gap: 2px;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--page);
+}
+.jx-sale span,
+.jx-sale small {
+  color: var(--subtle);
+  font-size: 12px;
+}
+.jx-sale strong {
+  font-size: 26px;
+  letter-spacing: -0.03em;
+}
+@media (min-width: 760px) and (max-width: 1179px) {
+  .journey-steps {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Plataforma: módulos */
+.platform-modules {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 16px;
+  padding-top: 28px;
+  border-top: 1px solid #ffffff1f;
+}
+.platform-modules-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 6px 16px;
+}
+.platform-modules h4 {
+  margin: 0;
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+.platform-modules-head span {
+  color: #a3a6ad;
+  font-size: 13px;
+}
+.platform-modules ul {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.platform-modules li {
+  display: grid;
+  gap: 4px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: #ffffff0a;
+  border: 1px solid #ffffff17;
+}
+.platform-modules li strong {
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+}
+.platform-modules li span {
+  color: #a3a6ad;
+  font-size: 13px;
+  line-height: 1.45;
+}
+@media (max-width: 999px) {
+  .platform-modules ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 559px) {
+  .platform-modules ul {
+    grid-template-columns: 1fr;
+  }
+}
+.jx-note {
+  color: var(--subtle);
+  font-size: 11px;
 }

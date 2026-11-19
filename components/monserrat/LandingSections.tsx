@@ -13,6 +13,7 @@ import {
   caseStudies,
   engagement,
   faqs,
+  platformModules,
   process,
   sectors,
   solutions,
@@ -124,7 +125,7 @@ function SolutionVisual({ id }: { id: Solution["id"] }) {
   }
   return (
     <div className="solution-visual chain-visual" aria-hidden="true">
-      {["Pedido #1042", "Inventario", "Aviso al cliente"].map((t, i) => (
+      {["Pedido #1042", "Envío en camino", "Aviso al cliente"].map((t, i) => (
         <span key={t} className={i === 2 ? "is-done" : ""}>
           {i === 2 ? <Check size={12} /> : <i />}
           {t}
@@ -207,8 +208,8 @@ export function PlatformBlock() {
           Tus canales, tu agenda y tus resultados en un solo panel
         </h3>
         <p>
-          Trabajamos en una plataforma propia que reúne mensajes, agenda,
-          contactos, seguimiento de ventas y resultados. Así sabes qué está
+          Trabajamos en una plataforma propia que reúne tus conversaciones,
+          clientes, pipeline, agenda, ventas y resultados. Así sabes qué está
           pasando sin saltar entre aplicaciones, y puedes medir qué está
           haciendo cada automatización.
         </p>
@@ -236,7 +237,7 @@ export function PlatformBlock() {
             <MaiMark width={18} height={18} />
             MONSERRAT_AI
           </span>
-          {["Inbox", "Contactos", "Agenda", "Seguimiento", "Resultados"].map(
+          {["Inbox", "Clientes", "Agenda", "Pipeline", "Resultados"].map(
             (t, i) => (
               <span className={i === 4 ? "selected" : ""} key={t}>
                 {t}
@@ -277,6 +278,20 @@ export function PlatformBlock() {
             ))}
           </div>
         </div>
+      </div>
+      <div className="platform-modules">
+        <div className="platform-modules-head">
+          <h4>Qué incluye la plataforma</h4>
+          <span>Cada negocio accede según los módulos de su plan.</span>
+        </div>
+        <ul>
+          {platformModules.map(([name, text]) => (
+            <li key={name}>
+              <strong>{name}</strong>
+              <span>{text}</span>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
