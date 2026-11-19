@@ -4,12 +4,15 @@ import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { MaiMark } from "./MaiMark";
 import { track } from "@/lib/analytics";
+import { PRIMARY_CTA } from "@/lib/site-content";
 
 const links = [
-  ["Automatizaciones", "soluciones"],
+  ["Soluciones", "soluciones"],
+  ["Cómo funciona", "como-funciona"],
   ["Cómo trabajamos", "como-trabajamos"],
-  ["Más servicios", "mas-soluciones"],
-  ["Contacto", "contacto"],
+  ["Servicios", "mas-soluciones"],
+  ["Preguntas", "preguntas"],
+  [PRIMARY_CTA, "contacto"],
 ];
 
 export default function Header({ innerPage = false }: { innerPage?: boolean }) {
@@ -55,7 +58,7 @@ export default function Header({ innerPage = false }: { innerPage?: boolean }) {
               className={id === "contacto" ? "nav-contact" : ""}
               onClick={
                 id === "contacto"
-                  ? () => track("cta_click", { location: "header", subject: "" })
+                  ? () => track("cta_click", { location: "header", subject: "Automatización" })
                   : undefined
               }
             >
@@ -77,20 +80,14 @@ export default function Header({ innerPage = false }: { innerPage?: boolean }) {
       </nav>
       {open && (
         <div className="mobile-navigation" id="mobile-navigation">
-          {[
-            ["Para quién es", "para-quien"],
-            ["Problemas que resolvemos", "problemas"],
-            ...links.slice(0, 3),
-            ["Marketing", "marketing"],
-            links[3],
-          ].map(([label, id]) => (
+          {links.map(([label, id]) => (
             <a
               key={id}
               href={`${prefix}#${id}`}
               onClick={() => {
                 setOpen(false);
                 if (id === "contacto")
-                  track("cta_click", { location: "header_mobile", subject: "" });
+                  track("cta_click", { location: "header_mobile", subject: "Automatización" });
               }}
             >
               {label}

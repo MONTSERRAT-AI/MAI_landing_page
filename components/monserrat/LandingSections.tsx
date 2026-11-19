@@ -1,222 +1,200 @@
 import Image from "next/image";
 import {
   ArrowRight,
-  CalendarDays,
+  ArrowUpRight,
   Check,
   Code2,
-  CreditCard,
   Globe2,
-  MessageCircle,
+  Plus,
   Search,
-  UserRound,
 } from "lucide-react";
-import { audience, problems, process, useCases } from "@/lib/site-content";
+import {
+  PRIMARY_CTA,
+  caseStudies,
+  engagement,
+  faqs,
+  platformModules,
+  process,
+  sectors,
+  solutions,
+  type Solution,
+} from "@/lib/site-content";
 import { MaiMark } from "./MaiMark";
 import { ContactLink } from "./ContactLink";
 import { Eyebrow } from "./Eyebrow";
 
-export function AudienceMarquee() {
+const CHANNELS = [
+  ["whatsapp", "WhatsApp"],
+  ["instagram", "Instagram"],
+  ["telegram", "Telegram"],
+  ["messenger", "Messenger"],
+  ["mail", "Correo"],
+] as const;
+
+/* ───────────── B. Evidencia real (oculta mientras no haya casos) ───────────── */
+
+export function CaseStudies() {
+  if (caseStudies.length === 0) return null;
   return (
-    <section
-      className="audience-section"
-      id="para-quien"
-      aria-labelledby="audience-heading"
-    >
-      <div className="container section-intro">
-        <div>
-          <Eyebrow>PARA QUIÉN ES</Eyebrow>
-          <h2 id="audience-heading" className="heading-medium">
-            Para negocios que atienden clientes todos los días
-          </h2>
+    <section className="section" id="casos" aria-labelledby="cases-heading">
+      <div className="container section-stack">
+        <div className="section-intro">
+          <div>
+            <Eyebrow>LO QUE HEMOS CONSTRUIDO</Eyebrow>
+            <h2 id="cases-heading" className="heading-medium">
+              Casos reales
+            </h2>
+          </div>
         </div>
-        <p>
-          Si tu negocio recibe mensajes, agenda citas o vende en línea, hay
-          tareas que se pueden automatizar.
-        </p>
-      </div>
-      <div className="audience-window">
-        <div className="audience-track">
-          {[0, 1].map((copy) => (
-            <div
-              key={copy}
-              className="audience-group"
-              aria-hidden={copy === 1 ? true : undefined}
-            >
-              {audience.map((item) => (
-                <article className="audience-card" key={item.id}>
-                  <Image
-                    src={`/audience/${item.id}.webp`}
-                    alt=""
-                    fill
-                    sizes="230px"
-                    loading="lazy"
-                  />
-                  <span className="audience-result">
-                    <span>
-                      <Check size={11} />
-                    </span>
-                    {item.result}
-                  </span>
-                  <h3>{item.name}</h3>
-                </article>
+        {caseStudies.map((c) => (
+          <article className="case-card" key={c.business}>
+            <div className="case-copy">
+              <h3>{c.business}</h3>
+              <p>{c.context}</p>
+              <dl>
+                <dt>Problema inicial</dt>
+                <dd>{c.problem}</dd>
+                <dt>Solución implementada</dt>
+                <dd>{c.solution}</dd>
+              </dl>
+              {c.results && c.results.length > 0 && (
+                <ul className="case-results">
+                  {c.results.map((r) => (
+                    <li key={r.label}>
+                      <strong>{r.value}</strong>
+                      <span>{r.label}</span>
+                      <small>{r.period}</small>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {c.testimonial && (
+                <blockquote>
+                  <p>“{c.testimonial.quote}”</p>
+                  <footer>
+                    {c.testimonial.author} · {c.testimonial.role}
+                  </footer>
+                </blockquote>
+              )}
+            </div>
+            <div className="case-shots">
+              {c.screenshots.map((s) => (
+                <Image key={s.src} src={s.src} alt={s.alt} width={640} height={400} />
               ))}
             </div>
-          ))}
-        </div>
-      </div>
-      <p className="audience-note container">
-        Escenarios ilustrativos de automatización.
-      </p>
-    </section>
-  );
-}
-
-export function Problems() {
-  return (
-    <section
-      className="section"
-      id="problemas"
-      aria-labelledby="problems-heading"
-    >
-      <div className="container problems-layout">
-        <div className="problems-intro">
-          <Eyebrow>PROBLEMAS QUE RESOLVEMOS</Eyebrow>
-          <h2 id="problems-heading">¿Te suena alguna de estas situaciones?</h2>
-          <p>
-            Son tareas que se repiten todos los días y que, bien automatizadas,
-            dejan de depender de que alguien se acuerde.
-          </p>
-        </div>
-        <div className="problems-list">
-          {problems.map(([quote, answer]) => (
-            <div className="problem" key={quote}>
-              <p>“{quote}”</p>
-              <span>
-                <ArrowRight size={14} />
-                {answer}
-              </span>
-            </div>
-          ))}
-        </div>
+          </article>
+        ))}
       </div>
     </section>
   );
 }
 
-export function AutomationFlow() {
+/* ───────────── C. Tres soluciones principales ───────────── */
+
+function SolutionVisual({ id }: { id: Solution["id"] }) {
+  if (id === "atender") {
+    return (
+      <div className="solution-visual chat-visual" aria-hidden="true">
+        <span className="sv-in">
+          <Image src="/channels/instagram.svg" alt="" width={12} height={12} />
+          ¿Hacen envíos a Medellín?
+        </span>
+        <span className="sv-out">
+          <MaiMark width={14} height={14} />
+          Sí. Te envío el enlace para completar tu pedido.
+        </span>
+        <span className="sv-chip sv-chip-blue">Oportunidad · En conversación</span>
+      </div>
+    );
+  }
+  if (id === "reservar") {
+    return (
+      <div className="solution-visual slots-visual" aria-hidden="true">
+        <span className="sv-day">Sábado</span>
+        <div className="sv-slots">
+          <span>9:00</span>
+          <span className="is-picked">10:00</span>
+          <span>11:30</span>
+          <span className="is-busy">12:00</span>
+        </div>
+        <span className="sv-chip sv-chip-green">
+          <Check size={11} /> Confirmada · recordatorio programado
+        </span>
+      </div>
+    );
+  }
+  return (
+    <div className="solution-visual chain-visual" aria-hidden="true">
+      {["Pedido #1042", "Envío en camino", "Aviso al cliente"].map((t, i) => (
+        <span key={t} className={i === 2 ? "is-done" : ""}>
+          {i === 2 ? <Check size={12} /> : <i />}
+          {t}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+export function Solutions() {
   return (
     <section
-      className="automation-section"
+      className="section solutions-section"
       id="soluciones"
-      aria-labelledby="automation-heading"
+      aria-labelledby="solutions-heading"
     >
       <div className="container section-stack">
         <div className="section-intro">
           <div>
-            <Eyebrow>NUESTRA ESPECIALIDAD</Eyebrow>
-            <h2 id="automation-heading">
-              Automatizaciones hechas a la medida de tu operación
+            <Eyebrow>QUÉ AUTOMATIZAMOS</Eyebrow>
+            <h2 id="solutions-heading">
+              Tres frentes donde la automatización se nota en el día a día
             </h2>
           </div>
           <p>
-            Diseñamos flujos que conectan tus canales, tus herramientas y tu
-            equipo. Algo pasa, la IA lo entiende y cada paso siguiente ocurre
-            solo.
+            Cada solución se adapta a cómo trabaja tu negocio. Empezamos por la
+            tarea que más tiempo te quita y crecemos desde ahí.
           </p>
         </div>
-        <div className="flow-canvas">
-          <div className="flow-caption">
-            <span className="status-pill">
-              <i />
-              Flujo activo · ejemplo
-            </span>
-            <span className="eyebrow">MENSAJE → RESERVA → SEGUIMIENTO</span>
-          </div>
-          <div className="flow-diagram">
-            <svg
-              className="flow-lines"
-              viewBox="0 0 1000 300"
-              preserveAspectRatio="none"
-              aria-hidden="true"
-            >
-              <path d="M285 150H355M645 150H715M645 150C685 150 675 48 715 48M645 150C685 150 675 252 715 252" />
-              <path
-                className="flow-line-active"
-                d="M285 150H355M645 150C685 150 675 48 715 48"
-              />
-            </svg>
-            <div className="flow-start">
-              <div className="flow-node">
-                <span className="node-icon whatsapp">
-                  <MessageCircle size={22} />
-                </span>
+        <div className="solutions-grid">
+          {solutions.map((s) => (
+            <article className="solution-card" key={s.id} id={`solucion-${s.id}`}>
+              <span className="eyebrow solution-label">{s.label}</span>
+              <h3>{s.title}</h3>
+              <SolutionVisual id={s.id} />
+              <dl>
                 <div>
-                  <strong>Mensaje nuevo</strong>
-                  <small>WhatsApp · hace un momento</small>
+                  <dt>La situación</dt>
+                  <dd>{s.situation}</dd>
                 </div>
-              </div>
-              <span className="flow-message">“¿Tienen hora el sábado?”</span>
-            </div>
-            <div className="flow-mai">
-              <MaiMark width={52} height={52} />
-              <div>
-                <strong>MAI entiende y actúa</strong>
-                <small>Según las reglas de tu negocio</small>
-              </div>
-              <span className="mai-status">
-                <span />
-                Procesando solicitud
-              </span>
-            </div>
-            <div className="flow-actions">
-              {[
-                [CalendarDays, "Crear reserva", "Sábado · 10:00", true],
-                [
-                  CreditCard,
-                  "Enviar enlace de pago",
-                  "Cuando corresponda",
-                  false,
-                ],
-                [UserRound, "Actualizar contacto", "Historial al día", false],
-              ].map(([Icon, title, subtitle, active]) => {
-                const NodeIcon = Icon as typeof CalendarDays;
-                return (
-                  <div
-                    className={`flow-node ${active ? "is-active" : ""}`}
-                    key={String(title)}
-                  >
-                    <span className="node-icon">
-                      <NodeIcon size={20} />
-                    </span>
-                    <div>
-                      <strong>{String(title)}</strong>
-                      <small>{String(subtitle)}</small>
-                    </div>
-                    {active && <Check size={16} className="node-check" />}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-          <div className="flow-footnote">
-            <span>Un mensaje. Varios pasos resueltos.</span>
-            <span>Ejemplo de flujo · Configurable para tu negocio</span>
-          </div>
-        </div>
-        <div className="use-cases">
-          {useCases.map(([title, description], i) => (
-            <article key={title}>
-              <span className="eyebrow">0{i + 1}</span>
-              <h3>{title}</h3>
-              <p>{description}</p>
+                <div>
+                  <dt>Qué automatizamos</dt>
+                  <dd>{s.automate}</dd>
+                </div>
+                <div>
+                  <dt>Qué cambia para tu equipo</dt>
+                  <dd>{s.change}</dd>
+                </div>
+              </dl>
+              <ContactLink
+                subject="Automatización"
+                location={`solucion-${s.id}`}
+                className="button button-dark"
+              >
+                {PRIMARY_CTA} <ArrowUpRight size={16} aria-hidden="true" />
+              </ContactLink>
             </article>
           ))}
         </div>
-        <PlatformBlock />
+        <p className="sectors-line">
+          <span>Lo aplicamos en negocios que atienden clientes todos los días:</span>{" "}
+          {sectors.join(" · ")}.
+        </p>
       </div>
     </section>
   );
 }
+
+/* ───────────── D. Plataforma (canales + panel) ───────────── */
 
 export function PlatformBlock() {
   return (
@@ -226,49 +204,27 @@ export function PlatformBlock() {
           <i />
           TODO CONECTADO
         </span>
-        <h2 className="heading-medium">
-          Cuando tus procesos se conectan, ves tu negocio en un solo lugar
-        </h2>
+        <h3 className="heading-medium">
+          Tus canales, tu agenda y tus resultados en un solo panel
+        </h3>
         <p>
-          Trabajamos en una plataforma propia que reúne mensajes, agenda,
-          contactos, seguimiento de ventas y resultados. Así sabes qué está
+          Trabajamos en una plataforma propia que reúne tus conversaciones,
+          clientes, pipeline, agenda, ventas y resultados. Así sabes qué está
           pasando sin saltar entre aplicaciones, y puedes medir qué está
           haciendo cada automatización.
         </p>
-        <div className="platform-features">
-          {[
-            "Mensajes",
-            "Agenda",
-            "Contactos",
-            "Seguimiento de ventas",
-            "Resultados",
-          ].map((t) => (
-            <span key={t}>{t}</span>
-          ))}
-        </div>
         <div className="platform-channels">
-          <span>Todos tus canales en un solo lugar</span>
-          <div>
-            {[
-              ["whatsapp", "WhatsApp"],
-              ["instagram", "Instagram"],
-              ["telegram", "Telegram"],
-              ["messenger", "Messenger"],
-              ["mail", "Correo"],
-            ].map(([id, title]) => (
-              <span key={id} title={title}>
-                <Image
-                  src={`/channels/${id}.svg`}
-                  alt={title}
-                  width={22}
-                  height={22}
-                />
-              </span>
+          <span>Canales que se conectan</span>
+          <ul>
+            {CHANNELS.map(([id, title]) => (
+              <li key={id} title={title}>
+                <Image src={`/channels/${id}.svg`} alt={title} width={22} height={22} />
+              </li>
             ))}
-            <span title="Página web">
-              <Globe2 size={22} aria-label="Página web" />
-            </span>
-          </div>
+            <li title="Página web">
+              <Globe2 size={22} aria-label="Página web" role="img" />
+            </li>
+          </ul>
         </div>
       </div>
       <div
@@ -281,7 +237,7 @@ export function PlatformBlock() {
             <MaiMark width={18} height={18} />
             MONSERRAT_AI
           </span>
-          {["Inbox", "Contactos", "Agenda", "Seguimiento", "Resultados"].map(
+          {["Inbox", "Clientes", "Agenda", "Pipeline", "Resultados"].map(
             (t, i) => (
               <span className={i === 4 ? "selected" : ""} key={t}>
                 {t}
@@ -299,12 +255,10 @@ export function PlatformBlock() {
             <div>
               <span>Reservas creadas por automatización</span>
               <strong>48</strong>
-              <small>● Medido</small>
             </div>
             <div>
               <span>Conversaciones atendidas</span>
               <strong>312</strong>
-              <small>● Medido</small>
             </div>
           </div>
           <div className="dashboard-chart">
@@ -317,9 +271,7 @@ export function PlatformBlock() {
               <div key={title}>
                 <span>{title}</span>
                 <span className="chart-track">
-                  <i
-                    style={{ transform: `scaleX(${Number(percent) / 100})` }}
-                  />
+                  <i style={{ transform: `scaleX(${Number(percent) / 100})` }} />
                 </span>
                 <span>{number}</span>
               </div>
@@ -327,9 +279,25 @@ export function PlatformBlock() {
           </div>
         </div>
       </div>
+      <div className="platform-modules">
+        <div className="platform-modules-head">
+          <h4>Qué incluye la plataforma</h4>
+          <span>Cada negocio accede según los módulos de su plan.</span>
+        </div>
+        <ul>
+          {platformModules.map(([name, text]) => (
+            <li key={name}>
+              <strong>{name}</strong>
+              <span>{text}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
+
+/* ───────────── E. Cómo trabajamos y qué contratas ───────────── */
 
 export function Process() {
   return (
@@ -339,11 +307,17 @@ export function Process() {
       aria-labelledby="process-heading"
     >
       <div className="container section-stack">
-        <div className="process-intro">
-          <Eyebrow>CÓMO TRABAJAMOS</Eyebrow>
-          <h2 id="process-heading">
-            De la primera conversación a una solución funcionando
-          </h2>
+        <div className="section-intro">
+          <div>
+            <Eyebrow>CÓMO TRABAJAMOS</Eyebrow>
+            <h2 id="process-heading">
+              De la primera conversación a una solución funcionando
+            </h2>
+          </div>
+          <p>
+            Usas nuestra plataforma y nosotros hacemos la implementación a la
+            medida de tu operación.
+          </p>
         </div>
         <ol className="process-timeline">
           {process.map(([title, description], i) => (
@@ -357,10 +331,62 @@ export function Process() {
             </li>
           ))}
         </ol>
+        <div className="engagement" aria-labelledby="engagement-heading">
+          <h3 id="engagement-heading" className="engagement-heading">
+            Qué contratas
+          </h3>
+          <div className="engagement-grid">
+            <article>
+              <span className="eyebrow">01</span>
+              <h4>{engagement.uses.title}</h4>
+              <p>{engagement.uses.text}</p>
+            </article>
+            <article>
+              <span className="eyebrow">02</span>
+              <h4>{engagement.weDo.title}</h4>
+              <ul className="check-list">
+                {engagement.weDo.items.map((t) => (
+                  <li key={t}>
+                    <Check size={14} aria-hidden="true" />
+                    {t}
+                  </li>
+                ))}
+              </ul>
+            </article>
+            <article>
+              <span className="eyebrow">03</span>
+              <h4>{engagement.scope.title}</h4>
+              <p>{engagement.scope.text}</p>
+            </article>
+          </div>
+          <div className="engagement-footer">
+            <div>
+              <span className="engagement-sub">Un proyecto puede incluir</span>
+              <ul className="deliverables">
+                {engagement.deliverables.map((d) => (
+                  <li key={d}>{d}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <span className="engagement-sub">Cómo empezamos</span>
+              <ol className="start-steps">
+                {engagement.start.map((d) => (
+                  <li key={d}>{d}</li>
+                ))}
+              </ol>
+              <ContactLink location="como-trabajamos" className="button button-red">
+                {PRIMARY_CTA} <ArrowUpRight size={16} aria-hidden="true" />
+              </ContactLink>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
 }
+
+/* ───────────── F. Servicios complementarios ───────────── */
 
 export function ServicesBento() {
   return (
@@ -374,13 +400,12 @@ export function ServicesBento() {
           <div>
             <Eyebrow>SERVICIOS COMPLEMENTARIOS</Eyebrow>
             <h2 className="heading-medium" id="services-heading">
-              Más soluciones para tu negocio
+              También te ayudamos con tu presencia digital
             </h2>
           </div>
           <p>
-            Puedes contratarlas de forma independiente o sumarlas a una
-            automatización. Cada una se cotiza por separado según lo que
-            necesites.
+            Puedes contratarlos de forma independiente o sumarlos a una
+            automatización. Cada proyecto se cotiza según su alcance.
           </p>
         </div>
         <div className="services-bento">
@@ -411,12 +436,8 @@ export function ServicesBento() {
               reservas.
             </p>
             <small>Se puede conectar con tus automatizaciones.</small>
-            <ContactLink
-              subject="Desarrollo web"
-              kind="service"
-              className="button button-outline"
-            >
-              Consultar por desarrollo web <ArrowRight size={16} />
+            <ContactLink subject="Desarrollo web" kind="service" className="button button-outline">
+              Consultar por desarrollo web <ArrowRight size={16} aria-hidden="true" />
             </ContactLink>
           </article>
           <article className="service-visibility">
@@ -432,8 +453,9 @@ export function ServicesBento() {
             </div>
             <h3>Visibilidad en buscadores y respuestas de IA</h3>
             <p>
-              Optimizamos tu presencia digital para que te encuentren y
-              entiendan qué haces.
+              Trabajamos tu presencia digital para que las personas encuentren
+              tu negocio y entiendan qué ofreces, en buscadores y en asistentes
+              de IA.
             </p>
             <small>No garantizamos posiciones ni apariciones.</small>
             <ContactLink
@@ -441,29 +463,70 @@ export function ServicesBento() {
               kind="service"
               className="button button-outline-light"
             >
-              Consultar por visibilidad <ArrowRight size={16} />
+              Consultar por visibilidad <ArrowRight size={16} aria-hidden="true" />
             </ContactLink>
           </article>
           <article className="service-custom">
             <div className="service-visual code-mock" aria-hidden="true">
               <Code2 size={26} />
             </div>
-            <h3>Soluciones a medida</h3>
+            <h3>Soluciones tecnológicas a medida</h3>
             <p>
               Desarrollos e integraciones para una necesidad concreta, cuando
               una herramienta estándar no alcanza.
             </p>
             <small>Partimos de una conversación para definir el alcance.</small>
-            <ContactLink
-              subject="Solución a medida"
-              kind="service"
-              className="button button-outline"
-            >
-              Consultar por una solución <ArrowRight size={16} />
+            <ContactLink subject="Solución a medida" kind="service" className="button button-outline">
+              Consultar por una solución <ArrowRight size={16} aria-hidden="true" />
             </ContactLink>
           </article>
         </div>
       </div>
+    </section>
+  );
+}
+
+/* ───────────── G. Preguntas frecuentes ───────────── */
+
+export function Faq() {
+  return (
+    <section className="section faq-section" id="preguntas" aria-labelledby="faq-heading">
+      <div className="container faq-layout">
+        <div className="faq-intro">
+          <Eyebrow>PREGUNTAS FRECUENTES</Eyebrow>
+          <h2 id="faq-heading" className="heading-medium">
+            Lo que suelen preguntarnos antes de empezar
+          </h2>
+          <ContactLink location="faq" className="button button-dark">
+            {PRIMARY_CTA} <ArrowUpRight size={16} aria-hidden="true" />
+          </ContactLink>
+        </div>
+        <div className="faq-list">
+          {faqs.map((f) => (
+            <details key={f.q}>
+              <summary>
+                {f.q}
+                <Plus size={18} aria-hidden="true" />
+              </summary>
+              <p>{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: faqs.map((f) => ({
+              "@type": "Question",
+              name: f.q,
+              acceptedAnswer: { "@type": "Answer", text: f.a },
+            })),
+          }).replace(/</g, "\\u003c"),
+        }}
+      />
     </section>
   );
 }
