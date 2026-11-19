@@ -1767,8 +1767,12 @@ h3 {
   font-size: 16px;
   line-height: 1.5;
   color: #a3a6ad;
-  max-width: 400px;
   text-wrap: pretty;
+}
+@media (min-width: 1000px) and (max-width: 1179px) {
+  .hero-description {
+    font-size: 14px;
+  }
 }
 .hero-demo {
   position: relative;
@@ -1794,9 +1798,6 @@ h3 {
   .hero-intro {
     grid-template-columns: 1fr;
     align-items: start;
-  }
-  .hero-description {
-    max-width: 560px;
   }
 }
 @media (max-width: 759px) {
