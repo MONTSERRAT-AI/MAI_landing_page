@@ -2634,3 +2634,39 @@ h3 {
   font-family: var(--font-geist-mono), monospace;
   font-size: 0.85em;
 }
+
+/* Botón de la navegación: WhatsApp mientras el CTA del inicio está a la vista,
+   CTA principal después. Hueco de ancho fijo para que la navegación no salte. */
+.nav-action {
+  display: inline-flex;
+  justify-content: flex-end;
+  min-width: 222px;
+  margin-left: 10px;
+}
+.desktop-nav .nav-action .nav-contact {
+  margin-left: 0;
+}
+.desktop-nav .nav-action a {
+  gap: 8px;
+  animation: nav-action-in 0.25s ease both;
+}
+.desktop-nav .nav-whatsapp {
+  border: 1px solid #ffffff38;
+  color: white;
+  padding-inline: 18px;
+}
+.desktop-nav .nav-whatsapp:hover {
+  color: var(--ink);
+  background: white;
+}
+@keyframes nav-action-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+.mobile-navigation .mobile-whatsapp {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

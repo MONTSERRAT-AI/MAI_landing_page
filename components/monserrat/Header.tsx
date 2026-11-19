@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, MessageCircle, X } from "lucide-react";
 import { MaiMark } from "./MaiMark";
 import { track } from "@/lib/analytics";
-import { PRIMARY_CTA } from "@/lib/site-content";
+import { PRIMARY_CTA, WHATSAPP_URL } from "@/lib/site-content";
 
 const links = [
   ["Soluciones", "soluciones"],
@@ -12,12 +12,33 @@ const links = [
   ["Cómo trabajamos", "como-trabajamos"],
   ["Servicios", "mas-soluciones"],
   ["Preguntas", "preguntas"],
-  [PRIMARY_CTA, "contacto"],
 ];
+
+/**
+ * El botón de la navegación cambia según el scroll para no duplicar el CTA:
+ * mientras el CTA del inicio está a la vista muestra WhatsApp, y cuando sale
+ * de la pantalla pasa a "Cuéntanos qué necesitas".
+ */
+function useHeroCtaVisible(innerPage: boolean) {
+  const [visible, setVisible] = useState(!innerPage);
+  useEffect(() => {
+    if (innerPage) return;
+    const target = document.querySelector(".hero-actions");
+    if (!target) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setVisible(entry.isIntersecting),
+      { rootMargin: "-96px 0px 0px 0px" },
+    );
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [innerPage]);
+  return visible;
+}
 
 export default function Header({ innerPage = false }: { innerPage?: boolean }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const heroCtaVisible = useHeroCtaVisible(innerPage);
   useEffect(() => {
     const update = () => setScrolled(window.scrollY > 24);
     const escape = (e: KeyboardEvent) => {
@@ -37,6 +58,10 @@ export default function Header({ innerPage = false }: { innerPage?: boolean }) {
     };
   }, []);
   const prefix = innerPage ? "/" : "";
+  const ctaClick = (location: string) =>
+    track("cta_click", { location, subject: "Automatización" });
+  const whatsappClick = (location: string) =>
+    track("whatsapp_click", { location });
   return (
     <header
       className={`site-header ${scrolled || innerPage || open ? "is-scrolled" : ""}`}
@@ -52,19 +77,34 @@ export default function Header({ innerPage = false }: { innerPage?: boolean }) {
         </a>
         <div className="desktop-nav">
           {links.map(([label, id]) => (
-            <a
-              key={id}
-              href={`${prefix}#${id}`}
-              className={id === "contacto" ? "nav-contact" : ""}
-              onClick={
-                id === "contacto"
-                  ? () => track("cta_click", { location: "header", subject: "Automatización" })
-                  : undefined
-              }
-            >
+            <a key={id} href={`${prefix}#${id}`}>
               {label}
             </a>
           ))}
+          <span className="nav-action">
+            {heroCtaVisible ? (
+              <a
+                key="whatsapp"
+                className="nav-whatsapp"
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => whatsappClick("header")}
+              >
+                <MessageCircle size={16} aria-hidden="true" />
+                Escríbenos por WhatsApp
+              </a>
+            ) : (
+              <a
+                key="cta"
+                className="nav-contact"
+                href={`${prefix}#contacto`}
+                onClick={() => ctaClick("header")}
+              >
+                {PRIMARY_CTA}
+              </a>
+            )}
+          </span>
         </div>
         <button
           type="button"
@@ -81,18 +121,32 @@ export default function Header({ innerPage = false }: { innerPage?: boolean }) {
       {open && (
         <div className="mobile-navigation" id="mobile-navigation">
           {links.map(([label, id]) => (
-            <a
-              key={id}
-              href={`${prefix}#${id}`}
-              onClick={() => {
-                setOpen(false);
-                if (id === "contacto")
-                  track("cta_click", { location: "header_mobile", subject: "Automatización" });
-              }}
-            >
+            <a key={id} href={`${prefix}#${id}`} onClick={() => setOpen(false)}>
               {label}
             </a>
           ))}
+          <a
+            className="mobile-whatsapp"
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => {
+              setOpen(false);
+              whatsappClick("header_mobile");
+            }}
+          >
+            <MessageCircle size={16} aria-hidden="true" />
+            Escríbenos por WhatsApp
+          </a>
+          <a
+            href={`${prefix}#contacto`}
+            onClick={() => {
+              setOpen(false);
+              ctaClick("header_mobile");
+            }}
+          >
+            {PRIMARY_CTA}
+          </a>
         </div>
       )}
     </header>
