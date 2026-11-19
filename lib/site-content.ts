@@ -6,7 +6,7 @@ export const hero = {
   brand: ["Menos tareas.", "Más negocio."],
   title: "La IA hace lo repetitivo. Tu equipo, lo importante.",
   description:
-    "Conectamos tus mensajes, tu agenda y tus herramientas con soluciones de IA adaptadas a tu operación, para que tu equipo dedique su tiempo a atender y vender.",
+    "Soluciones de IA a tu medida que conectan tus mensajes, tu agenda y tus herramientas.",
   primaryCta: "Cuéntanos qué necesitas",
   secondaryCta: "Ver cómo funciona",
 };

@@ -1759,24 +1759,33 @@ h3 {
 }
 .hero-side {
   display: grid;
-  gap: 22px;
-  padding-bottom: 4px;
+  gap: 16px;
+  padding-bottom: 6px;
+  justify-items: start;
 }
 .hero-description {
-  font-size: clamp(16px, 1.35vw, 19px);
-  line-height: 1.55;
-  color: #c9cbd0;
-  max-width: 520px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #a3a6ad;
+  max-width: 400px;
   text-wrap: pretty;
 }
 .hero-demo {
   position: relative;
-  margin-top: clamp(28px, 4vw, 48px);
+  margin-top: clamp(24px, 3vw, 36px);
+}
+/* La demo es el centro: más ancha y con "monserrat" de borde a borde. */
+.hero-demo-inner {
+  max-width: 1240px;
+}
+.hero-watermark {
+  font-size: 24.6vw;
+  white-space: nowrap;
 }
 .hero-demo-label {
   position: relative;
   z-index: 1;
-  max-width: 1120px;
+  max-width: 1240px;
   margin: 0 auto 10px;
   color: #a3a6ad;
   font-size: 10px;
@@ -1785,6 +1794,9 @@ h3 {
   .hero-intro {
     grid-template-columns: 1fr;
     align-items: start;
+  }
+  .hero-description {
+    max-width: 560px;
   }
 }
 @media (max-width: 759px) {
@@ -1801,7 +1813,8 @@ h3 {
     font-size: 14px;
     padding-inline: 18px;
   }
-  .hero-demo-label {
+  .hero-demo-label,
+  .hero-demo-inner {
     max-width: 390px;
   }
 }
