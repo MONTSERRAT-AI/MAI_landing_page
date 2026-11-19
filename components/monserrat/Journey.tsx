@@ -148,12 +148,13 @@ export default function Journey({ children }: { children?: ReactNode }) {
           <div>
             <Eyebrow>CÓMO FUNCIONA</Eyebrow>
             <h2 id="journey-heading">
-              Del primer mensaje al resultado, en un mismo lugar
+              No reemplazamos a tu equipo. Le devolvemos su tiempo.
             </h2>
           </div>
           <p>
-            Así se ve un caso típico en nuestra plataforma. MAI hace los pasos
-            repetitivos y tu equipo puede intervenir en cualquier momento.
+            MAI hace los pasos repetitivos y tu equipo puede intervenir en
+            cualquier momento. Así se ve un caso típico en nuestra plataforma,
+            del primer mensaje al resultado.
           </p>
         </div>
 

@@ -4,9 +4,9 @@
 
 export const hero = {
   brand: ["Menos tareas.", "Más negocio."],
-  title: "Automatiza la atención, las reservas y el seguimiento de tu negocio.",
+  title: "La IA hace lo repetitivo. Tu equipo, lo importante.",
   description:
-    "Conectamos tus mensajes, tu agenda y tus herramientas con soluciones de IA adaptadas a tu operación.",
+    "Conectamos tus mensajes, tu agenda y tus herramientas con soluciones de IA adaptadas a tu operación, para que tu equipo dedique su tiempo a atender y vender.",
   primaryCta: "Cuéntanos qué necesitas",
   secondaryCta: "Ver cómo funciona",
 };
@@ -199,6 +199,10 @@ export const marketing = [
 export type Faq = { q: string; a: string };
 
 export const faqs: Faq[] = [
+  {
+    q: "¿Esto reemplaza a mi equipo?",
+    a: "No. Automatizamos las tareas que se repiten para que tu equipo dedique su tiempo a atender, decidir y vender.",
+  },
   {
     q: "¿Necesito conocimientos técnicos?",
     a: "No. Nosotros configuramos, construimos y conectamos la solución, y te mostramos cómo usarla en el día a día.",

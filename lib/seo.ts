@@ -19,9 +19,9 @@ export const SITE_URL = (
 
 export const SITE_NAME = "MONSERRAT_AI";
 export const SITE_TITLE =
-  "MONSERRAT_AI · Automatiza la atención, las reservas y el seguimiento";
+  "MONSERRAT_AI · Automatización con IA para atención, reservas y seguimiento";
 export const SITE_DESCRIPTION =
-  "Conectamos tus mensajes, tu agenda y tus herramientas con soluciones de IA adaptadas a tu operación. Menos tareas. Más negocio.";
+  "La IA hace lo repetitivo y tu equipo, lo importante. Conectamos tus mensajes, tu agenda y tus herramientas con soluciones de IA adaptadas a tu operación.";
 
 const ORG_ID = `${SITE_URL}/#organization`;
 
