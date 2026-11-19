@@ -39,6 +39,39 @@ export default function Hero() {
     if (host.current) observer.observe(host.current);
     return () => observer.disconnect();
   }, []);
+
+  // "monserrat" se expande en horizontal al bajar (--wm-p de 0 a 1).
+  // Un listener pasivo + requestAnimationFrame; solo escribe una variable CSS.
+  const watermark = useRef<HTMLSpanElement>(null);
+  useEffect(() => {
+    const el = watermark.current;
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (!el) return;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      if (media.matches) {
+        el.style.setProperty("--wm-p", "0");
+        return;
+      }
+      const range = Math.max(1, window.innerHeight * 0.9);
+      const p = Math.min(1, Math.max(0, window.scrollY / range));
+      el.style.setProperty("--wm-p", p.toFixed(4));
+    };
+    const request = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", request, { passive: true });
+    window.addEventListener("resize", request);
+    media.addEventListener("change", request);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", request);
+      window.removeEventListener("resize", request);
+      media.removeEventListener("change", request);
+    };
+  }, []);
   return (
     <section className="hero" id="inicio" aria-labelledby="hero-heading">
       <div className="hero-inner">
@@ -66,15 +99,15 @@ export default function Hero() {
           </div>
         </div>
         <div className="hero-demo" ref={host}>
-          <span className="hero-watermark" aria-hidden="true">
+          <span className="hero-watermark" aria-hidden="true" ref={watermark}>
             monserrat
           </span>
-          <p className="hero-demo-label eyebrow">
-            DEMO DE PRODUCTO · DATOS FICTICIOS
-          </p>
           <div className="hero-demo-inner">
             {visible ? <MaiDemo /> : <DemoPlaceholder />}
           </div>
+          <p className="hero-demo-label eyebrow">
+            DEMO DE PRODUCTO · DATOS FICTICIOS
+          </p>
         </div>
       </div>
     </section>
