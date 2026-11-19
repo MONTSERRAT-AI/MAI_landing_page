@@ -90,7 +90,7 @@ const MSGS: [ChannelKey, string][] = [
 ];
 const ITEM_MSG = [0, 2, 4];
 const ITEMS = [
-  { reply: "Sí, hay talla M. Te envié el enlace de pago.", who: "Laura M. · Venta", name: "Laura M.", meta: "WhatsApp · Venta", kl: "Ventas por chat · esta semana", kd: "▲ 18% vs. semana anterior", val: 2410000, money: true, value: "$189.000", avBg: "#FCE9EB", avFg: "#B0102A", tools: [["DB", "Inventario · talla M", "3 disponibles"], ["$", "Pagos · crear enlace", "Enlace creado"]] },
+  { reply: "Sí, hay talla M. Ya registré tu compra.", who: "Laura M. · Venta", name: "Laura M.", meta: "WhatsApp · Venta", kl: "Ventas por chat · esta semana", kd: "▲ 18% vs. semana anterior", val: 2410000, money: true, value: "$189.000", avBg: "#FCE9EB", avFg: "#B0102A", tools: [["DB", "Inventario · talla M", "3 disponibles"], ["$", "Ventas · registro", "Venta registrada"]] },
   { reply: "Listo, tu reserva quedó el sábado a las 10:00.", who: "Camilo R. · Reserva", name: "Camilo R.", meta: "Web · Reserva", kl: "Reservas creadas · esta semana", kd: "▲ 9 más que la anterior", val: 48, money: false, value: "$100.000", avBg: "#E7EEFA", avFg: "#2B5EA8", tools: [["◷", "Agenda · sábado", "10:00 libre"], ["◷", "Agenda · crear reserva", "Reserva #R-218"]] },
   { reply: "Tu pedido #1042 va en camino. Llega mañana.", who: "Ana P. · Pedido", name: "Ana P.", meta: "WhatsApp · Pedido", kl: "Clientes avisados de su envío", kd: "▲ Sin llamadas al equipo", val: 32, money: false, value: "$245.000", avBg: "#E3F4E6", avFg: "#1E6B34", tools: [["DB", "Pedidos · #1042", "Despachado"], ["↗", "Transportadora · rastreo", "Llega mañana"]] },
 ];
@@ -868,7 +868,7 @@ export default function MaiDemo({ controls = true, captions = true }: { controls
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", fontSize: 11, color: "#6E7075" }}>
                   <span style={{ fontFamily: MONO, letterSpacing: "0.06em" }}>PIPELINE</span>
                   <span ref={r("pfoot")} style={{ opacity: 0 }}>
-                    Cobrado este mes{" "}
+                    Registrado este mes{" "}
                     <span ref={r("pcash")} style={{ fontSize: 14, fontWeight: 600, color: "#1E6B34" }}>$18.450.000</span>
                   </span>
                 </div>
