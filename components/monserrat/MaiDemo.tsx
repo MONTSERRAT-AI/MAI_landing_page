@@ -27,9 +27,15 @@ type Rect = [number, number, number, number];
 
 /* ───────────────────────── Datos ───────────────────────── */
 
-const DUR = 32.24;
-const WM = "MONSERRAT_AI".split("");
-const KEEP: Record<number, number> = { 0: 0, 10: 1, 11: 2 };
+const DUR = 35.64;
+const BRAND = "MONTSERRAT_AI";
+const WM = BRAND.split("");
+/** Letras que se quedan al cerrar: M · A · I. */
+const KEEP_IDX = [0, BRAND.length - 2, BRAND.length - 1];
+const KEEP: Record<number, number> = Object.fromEntries(KEEP_IDX.map((k, i) => [k, i]));
+/** "_AI" en rojo. */
+const RED_FROM = BRAND.length - 3;
+const WM_MID = (BRAND.length - 1) / 2;
 const NOISE_T = ["Hola", "¿Precio?", "Info porfa", "¿Hay stock?", "???", "Buenas", "¿Horario?", "¿Me ayudan?", "¿Envían?", "Urgente", "¿Sigue disponible?", "Ok", "¿Cuánto?", "Necesito ayuda", "¿Abren hoy?", "Hola??", "¿Tienen cita?", "Quiero info"];
 const NOISE_B = ["+99", "12", "37", "8", "24"];
 const NOISE_P = ["3 mensajes nuevos", "5 sin leer", "Llamada perdida"];
@@ -84,9 +90,9 @@ const MSGS: [ChannelKey, string][] = [
 ];
 const ITEM_MSG = [0, 2, 4];
 const ITEMS = [
-  { reply: "Sí, hay talla M. Te envié el enlace de pago.", who: "Laura M. · Venta", name: "Laura M.", meta: "WhatsApp · Venta", kl: "Ventas por chat · esta semana", kd: "▲ 18% vs. semana anterior", val: 2410000, money: true, value: "$189.000", avBg: "#FCE9EB", avFg: "#B0102A" },
-  { reply: "Listo, tu reserva quedó el sábado a las 10:00.", who: "Camilo R. · Reserva", name: "Camilo R.", meta: "Web · Reserva", kl: "Reservas creadas · esta semana", kd: "▲ 9 más que la anterior", val: 48, money: false, value: "$100.000", avBg: "#E7EEFA", avFg: "#2B5EA8" },
-  { reply: "Tu pedido #1042 va en camino. Llega mañana.", who: "Ana P. · Pedido", name: "Ana P.", meta: "WhatsApp · Pedido", kl: "Clientes avisados de su envío", kd: "▲ Sin llamadas al equipo", val: 32, money: false, value: "$245.000", avBg: "#E3F4E6", avFg: "#1E6B34" },
+  { reply: "Sí, hay talla M. Te envié el enlace de pago.", who: "Laura M. · Venta", name: "Laura M.", meta: "WhatsApp · Venta", kl: "Ventas por chat · esta semana", kd: "▲ 18% vs. semana anterior", val: 2410000, money: true, value: "$189.000", avBg: "#FCE9EB", avFg: "#B0102A", tools: [["DB", "Inventario · talla M", "3 disponibles"], ["$", "Pagos · crear enlace", "Enlace creado"]] },
+  { reply: "Listo, tu reserva quedó el sábado a las 10:00.", who: "Camilo R. · Reserva", name: "Camilo R.", meta: "Web · Reserva", kl: "Reservas creadas · esta semana", kd: "▲ 9 más que la anterior", val: 48, money: false, value: "$100.000", avBg: "#E7EEFA", avFg: "#2B5EA8", tools: [["◷", "Agenda · sábado", "10:00 libre"], ["◷", "Agenda · crear reserva", "Reserva #R-218"]] },
+  { reply: "Tu pedido #1042 va en camino. Llega mañana.", who: "Ana P. · Pedido", name: "Ana P.", meta: "WhatsApp · Pedido", kl: "Clientes avisados de su envío", kd: "▲ Sin llamadas al equipo", val: 32, money: false, value: "$245.000", avBg: "#E3F4E6", avFg: "#1E6B34", tools: [["DB", "Pedidos · #1042", "Despachado"], ["↗", "Transportadora · rastreo", "Llega mañana"]] },
 ];
 const STAGES = [
   ["Nuevo", "#EFF0F3", "#6E7075"],
@@ -98,11 +104,16 @@ const FINAL_STAGE = [
   ["Cliente", "#E3F4E6", "#1E6B34"],
 ];
 const BARS = [38, 52, 46, 64, 58, 80, 72];
+const PIPE = ["Lead", "Calificado", "Reservó", "Asistió", "Pagó"];
+const PIPE_BASE = [64, 41, 28, 19, 112];
+const PIPE_FINAL = [4, 2, 4];
+const PIPE_VALUE = [189000, 0, 245000];
+const PIPE_DOT = ["#B0102A", "#2B5EA8", "#1E6B34"];
 const DAYS = ["L", "M", "M", "J", "V", "S", "D"];
 const CAPS: [string, string][] = [
   ["", "Demasiadas conversaciones al mismo tiempo"],
-  ["01", "MAI ordena el ruido y responde cada una"],
-  ["02", "MAI ordena todo en tu CRM"],
+  ["01", "MAI revisa tus sistemas y resuelve cada caso"],
+  ["02", "Cada cliente avanza solo en tu pipeline"],
   ["03", "Y lo convierte en datos para decidir"],
   ["", "Menos tareas manuales. Más negocio."],
 ];
@@ -119,7 +130,7 @@ const CFG: Record<Layout, Cfg> = {
     W: 1200, H: 675, capInset: 24, capSize: 19,
     msgs: [[70, 64], [470, 36], [850, 86], [110, 290], [820, 300], [190, 500], [790, 500]],
     core: [600, 300], coreD: [96, 70, 0.5], coreSize: 120,
-    rc: [[50, 80, 340, 150], [810, 80, 340, 150], [810, 410, 340, 150]],
+    rc: [[50, 62, 340, 214], [810, 62, 340, 214], [810, 392, 340, 214]],
     more: [90, 470],
     panel: [220, 140, 760, 400],
     rows: [[236, 222, 728, 62], [236, 292, 728, 62], [236, 362, 728, 62]],
@@ -128,13 +139,13 @@ const CFG: Record<Layout, Cfg> = {
     chart: [120, 334, 960, 220],
     chart2: [120, 236, 960, 340],
     cam: [[0, 600, 337, 1], [3.2, 600, 337, 1.02], [4.6, 600, 325, 1.03], [8.4, 600, 330, 1.02], [9.6, 600, 330, 1.03], [12.2, 600, 345, 1.0], [16.4, 600, 345, 1.03], [18, 600, 337, 1]],
-    wmSize: 150, wmSub: 20,
+    wmSize: 138, wmSub: 20,
   },
   mobile: {
     W: 390, H: 720, capInset: 14, capSize: 14,
     msgs: [[16, 26], [104, 102], [16, 178], [104, 254], [16, 330], [104, 406], [16, 482]],
     core: [195, 220], coreD: [40, 36, 0.4], coreSize: 96,
-    rc: [[16, 300, 358, 104], [16, 414, 358, 104], [16, 528, 358, 104]],
+    rc: [[16, 290, 358, 118], [16, 414, 358, 118], [16, 538, 358, 118]],
     more: null,
     panel: [16, 76, 358, 420],
     rows: [[24, 140, 342, 64], [24, 214, 342, 64], [24, 288, 342, 64]],
@@ -143,7 +154,7 @@ const CFG: Record<Layout, Cfg> = {
     chart: [16, 446, 358, 196],
     chart2: [16, 352, 358, 300],
     cam: [[0, 195, 360, 1], [4.6, 195, 360, 1.02], [8.4, 195, 360, 1.0], [18, 195, 360, 1]],
-    wmSize: 50, wmSub: 14,
+    wmSize: 44, wmSub: 14,
   },
 };
 
@@ -201,7 +212,10 @@ function applyFrame(real: number, ctx: FrameCtx) {
   // Remapeo de tiempo (mismas curvas que el prototipo).
   const b0 = real < 2.0 ? real : real < 3.6 ? 2.0 + (real - 2.0) * 0.5 : real - 0.8;
   const SL = 1.35, SPAN = 12.4;
-  const t1 = b0 <= 4.6 ? b0 : b0 < 4.6 + SPAN * SL ? 4.6 + (b0 - 4.6) / SL : b0 - SPAN * (SL - 1);
+  const t1r = b0 <= 4.6 ? b0 : b0 < 4.6 + SPAN * SL ? 4.6 + (b0 - 4.6) / SL : b0 - SPAN * (SL - 1);
+  // Las respuestas (4.8 s → 8.4 s) van 1.7× más lento para leer las herramientas.
+  const KS = 1.7, tA = 4.8, tB = 8.4;
+  const t1 = t1r < tA ? t1r : t1r < tA + (tB - tA) * KS ? tA + (t1r - tA) / KS : t1r - (tB - tA) * (KS - 1);
   const t = t1 < 14.6 ? t1 : t1 < 17.0 ? 14.6 + (t1 - 14.6) * 0.02 : t1 - 2.4 + 0.048;
   const ti = t1;
 
@@ -258,7 +272,8 @@ function applyFrame(real: number, ctx: FrameCtx) {
     Math.abs(Math.sin(Math.PI * clamp((t - 2.6) / 0.5))) * (t > 2.6 && t < 3.1 ? 1 : 0) +
     Math.abs(Math.sin(Math.PI * clamp((t - 19.3) / 0.5))) * (t > 19.3 && t < 19.8 ? 1 : 0);
   const pulse = 1 + 0.04 * Math.sin(Math.PI * clamp((t - 3.3) / 1.3)) * (t > 3.3 && t < 4.6 ? 1 : 0);
-  const csc = lerp(1, C.coreD[2], cd) * lerp(0.8, 1, seg(t, 2.6, 3.1)) * pulse;
+  const kick = Math.max(win(t, 9.9, 10.3, 0.15), win(t, 10.2, 10.6, 0.15), win(t, 10.5, 10.9, 0.15), win(t, 12.3, 12.8, 0.15));
+  const csc = lerp(1, C.coreD[2], cd) * lerp(0.8, 1, seg(t, 2.6, 3.1)) * pulse * (1 + 0.14 * kick);
   core.style.width = cs + "px";
   core.style.height = cs + "px";
   box(core, cx - cs / 2, cy - cs / 2);
@@ -266,9 +281,11 @@ function applyFrame(real: number, ctx: FrameCtx) {
   core.style.opacity = (seg(t, 2.6, 3.1) * FIN).toFixed(3);
   const st = g("status");
   if (st) {
-    const v = t < 3.3 ? "Hola, soy MAI" : t < 4.6 ? "MAI está pensando…" : t < 8.4 ? "MAI responde…" : "MAI guarda los datos…";
+    const v = t < 3.3 ? "Hola, soy MAI" : t < 4.6 ? "MAI está pensando…" : t < 6.4 ? "MAI consulta tus sistemas…" : t < 8.4 ? "MAI resuelve cada caso…" : "MAI guarda los datos…";
     if (st.textContent !== v) st.textContent = v;
-    st.style.opacity = ((1 - seg(t, 8.4, 9.2)) * (t < 3.3 ? 1 : seg(t, 4.9, 5.2))).toFixed(3);
+    // En móvil las tarjetas ocupan esa zona: el estado se oculta mientras se ven.
+    const mobHide = mob ? 1 - seg(t, 4.6, 4.9) : 1;
+    st.style.opacity = ((1 - seg(t, 8.4, 9.2)) * (t < 3.3 ? 1 : seg(t, 4.9, 5.2)) * mobHide).toFixed(3);
   }
   const ring = g("ring");
   if (ring) {
@@ -328,13 +345,13 @@ function applyFrame(real: number, ctx: FrameCtx) {
       const [sa, sb, se] = shapeMix(t);
       const spin = (t * 0.35 + 1.4 * seg(t, 4.8, 5.4) + 1.0 * seg(t, 8.3, 8.9)) * (1 - seg(t, 16.4, 17.0));
       const rad = cs * 0.48, c0 = box0 / 2, N = 160;
-      const breathe = 1 + 0.04 * Math.sin(t * 1.8) * act;
+      const breathe = 1 + 0.04 * Math.sin(real * 1.8) * act;
       c2.beginPath();
       for (let q = 0; q <= N; q++) {
         const a = (q / N) * Math.PI * 2;
         const loc = a - spin;
         const S = RS[sa](loc, t) * (1 - se) + RS[sb](loc, t) * se;
-        const n = 0.07 * Math.sin(2 * a + t * 1.3) + 0.05 * Math.sin(3 * a - t * 1.7 + 1) + 0.03 * Math.sin(5 * a + t * 2.1);
+        const n = 0.07 * Math.sin(2 * a + real * 1.3) + 0.05 * Math.sin(3 * a - real * 1.7 + 1) + 0.03 * Math.sin(5 * a + real * 2.1);
         const r = rad * S * breathe * (1 + n * act);
         const x = c0 + Math.cos(a) * r, y = c0 + Math.sin(a) * r;
         if (q) c2.lineTo(x, y); else c2.moveTo(x, y);
@@ -345,21 +362,37 @@ function applyFrame(real: number, ctx: FrameCtx) {
     }
   }
 
-  // Ojos y expresiones
+  // Ojos y expresiones (siguen a las filas y KPI durante el CRM)
   const ey = g("eyes");
   if (ey) {
-    const eo = seg(t, 2.7, 3.0) * (1 - seg(t, 8.4, 8.7)) + seg(t, 16.9, 17.3) * (t < 24.6 ? 1 : 0) * (1 - seg(t, 23.9, 24.4));
+    const eo = seg(t, 2.7, 3.0) * (t < 24.6 ? 1 : 0) * (1 - seg(t, 23.9, 24.4));
     const think = win(t, 3.4, 4.9, 0.2);
     const reply = win(t, 4.9, 8.4, 0.2);
-    const wow = Math.max(win(t, 4.85, 5.35, 0.12), win(t, 5.55, 6.05, 0.12), win(t, 6.25, 6.75, 0.12));
-    const lookX = lerp(lerp(-3, 0, think), Math.sin(t * 1.6) * 5, reply * (1 - think));
-    const lookY = -5 * think;
+    const wow = Math.max(win(t, 4.85, 5.35, 0.12), win(t, 5.55, 6.05, 0.12), win(t, 6.25, 6.75, 0.12), win(t, 10.95, 11.4, 0.12), win(t, 11.55, 12.0, 0.12), win(t, 14.2, 14.7, 0.12));
+    let lookX = lerp(lerp(-3, 0, think), Math.sin(t * 1.6) * 5, reply * (1 - think));
+    let lookY = -5 * think;
+    const crm = win(t, 9.0, 16.3, 0.3);
+    if (crm > 0.01) {
+      let tg: [number, number];
+      if (t < 12.2) {
+        const ri = clamp(Math.floor((t - 9.5) / 0.3), 0, 2), Wr = C.rows[ri];
+        tg = t < 10.6
+          ? [Wr[0] + Wr[2] * 0.6, Wr[1] + Wr[3] / 2]
+          : [C.panel[0] + C.panel[2] * (0.3 + 0.6 * seg(t, 10.6, 11.8)), C.panel[1] + C.panel[3] - 40];
+      } else {
+        const sw = 0.5 + 0.5 * Math.sin(t * 1.4);
+        tg = [lerp(C.kpi[0][0], C.kpi[2][0] + C.kpi[2][2], sw), C.kpi[0][1] + C.kpi[0][3]];
+      }
+      const dx = tg[0] - cx, dy = tg[1] - cy, dd = Math.hypot(dx, dy) || 1;
+      lookX += (dx / dd) * 9 * crm;
+      lookY += (dy / dd) * 9 * crm;
+    }
     ey.style.opacity = clamp(eo).toFixed(3);
     ey.style.gap = (14 - 5 * think + 3 * wow).toFixed(1) + "px";
     ey.style.transform = `translate(calc(-50% + ${lookX.toFixed(1)}px), calc(-50% + ${lookY.toFixed(1)}px)) rotate(${(6 * think * Math.sin(t * 9)).toFixed(1)}deg)`;
-    const blinkT = t > 17.5 && t < 19.4 ? t % 3.1 < 0.14 : (t > 7.2 && t < 7.34) || (t > 3.05 && t < 3.18);
+    const blinkT = t > 9 && t < 16.3 ? t % 2.7 < 0.12 : t > 19.3 && t < 23 ? t % 3.1 < 0.14 : (t > 7.2 && t < 7.34) || (t > 3.05 && t < 3.18);
     const blink = blinkT ? 0.12 : 1;
-    const wink = win(t, 20.6, 21.4, 0.14);
+    const wink = seg(t, 18.2, 18.3) * (1 - seg(t, 18.62, 18.84));
     const th = g("thk");
     if (th) {
       th.style.opacity = (think * (0.6 + 0.4 * Math.sin(t * 8))).toFixed(3);
@@ -368,13 +401,14 @@ function applyFrame(real: number, ctx: FrameCtx) {
     const e1 = g("eyeL"), e2 = g("eyeR");
     const squint = 1 - 0.62 * think;
     const big = 1 + 0.45 * wow;
+    const shape = think > 0.5 ? "35% 35% 50% 50% / 25% 25% 75% 75%" : "50%";
     if (e1) {
-      e1.style.transform = `scale(${big.toFixed(3)}, ${(blink * squint * big).toFixed(3)}) rotate(${(14 * think).toFixed(1)}deg)`;
-      e1.style.borderRadius = think > 0.5 ? "4px 4px 999px 999px" : "999px";
+      e1.style.transform = `scale(${(big * (1 + 0.03 * wink)).toFixed(3)}, ${(blink * squint * big * (1 - 0.1 * wink)).toFixed(3)}) rotate(${(14 * think).toFixed(1)}deg)`;
+      e1.style.borderRadius = shape;
     }
     if (e2) {
-      e2.style.transform = `scale(${big.toFixed(3)}, ${Math.max(0.12, blink * squint * big * (1 - 0.88 * wink)).toFixed(3)}) rotate(${(-14 * think).toFixed(1)}deg)`;
-      e2.style.borderRadius = wink > 0.5 ? "6px" : think > 0.5 ? "4px 4px 999px 999px" : "999px";
+      e2.style.transform = `translateY(${(1.5 * wink).toFixed(1)}px) rotate(${(-14 * think).toFixed(1)}deg) scale(${(big * (1 + 0.12 * wink)).toFixed(3)}, ${Math.max(0.12, blink * squint * big * (1 - 0.9 * wink)).toFixed(3)})`;
+      e2.style.borderRadius = shape;
     }
   }
   const bd = g("badge");
@@ -384,7 +418,24 @@ function applyFrame(real: number, ctx: FrameCtx) {
     bd.style.opacity = (win(t, 3.3, 8.6, 0.25) * (absorbed > 0 ? 1 : 0)).toFixed(3);
   }
 
-  // Tarjetas: respuesta → fila CRM → KPI
+  // Líneas punteadas de MAI a cada fila mientras ordena el CRM
+  ITEMS.forEach((_, i) => {
+    const l = g("l" + i);
+    if (!l) return;
+    if (t > 8.8 && t < 12) {
+      const W2 = C.rows[i], s0 = 9.45 + 0.3 * i, q = seg(t, s0, s0 + 0.75);
+      const tx = W2[0] - 2, tyy = W2[1] + W2[3] / 2;
+      const ddx = tx - cx, ddy = tyy - cy, dl = Math.hypot(ddx, ddy) || 1;
+      const sx2 = cx + (ddx / dl) * 36, sy2 = cy + (ddy / dl) * 36;
+      l.setAttribute("d", `M${sx2.toFixed(1)} ${sy2.toFixed(1)} C ${sx2.toFixed(1)} ${(sy2 + (tyy - sy2) * 0.6).toFixed(1)}, ${(tx - (tx - sx2) * 0.6).toFixed(1)} ${tyy.toFixed(1)}, ${tx.toFixed(1)} ${tyy.toFixed(1)}`);
+      l.style.display = "";
+      l.style.strokeDasharray = "0.3 2";
+      l.style.strokeDashoffset = (0.3 - 1.3 * q).toFixed(4);
+      l.style.opacity = (0.5 * win(t, s0, s0 + 0.75, 0.15)).toFixed(3);
+    } else l.style.display = "none";
+  });
+
+  // Tarjetas: respuesta (con herramientas consultadas) → fila CRM → KPI
   ITEMS.forEach((it, i) => {
     const el = g("rc" + i);
     if (!el) return;
@@ -406,7 +457,19 @@ function applyFrame(real: number, ctx: FrameCtx) {
     el.style.transform = `scale(${(1 + 0.03 * mv + 0.06 * ov).toFixed(4)})`;
     const ty = g("ty" + i), an = g("an" + i), ok = g("ok" + i);
     if (ty && an) {
-      const ts = a0 + 0.75, te = ts + 0.9;
+      const ts = a0 + 1.5, te = ts + 0.6;
+      it.tools.forEach((tl, j) => {
+        const row = g(`tw${i}_${j}`), stt = g(`ts${i}_${j}`);
+        if (!row || !stt) return;
+        const s0 = a0 + 0.6 + 0.45 * j, done = t >= s0 + 0.5;
+        const ap = seg(t, s0 - 0.1, s0 + 0.1);
+        row.style.opacity = ap.toFixed(3);
+        row.style.transform = `translateY(${((1 - ap) * 6).toFixed(1)}px)`;
+        row.style.borderColor = t >= s0 && !done ? "#E60A2F" : "#E1E4E9";
+        const v = done ? "✓ " + tl[2] : "consultando" + ".".repeat(1 + Math.floor((t * 6) % 3));
+        if (stt.textContent !== v) stt.textContent = v;
+        stt.style.color = done ? "#2F7D3C" : "#8A8D93";
+      });
       const n = Math.round(clamp((t - ts) / (te - ts)) * it.reply.length);
       const txt = it.reply.slice(0, n);
       if (an.textContent !== txt) an.textContent = txt;
@@ -418,7 +481,7 @@ function applyFrame(real: number, ctx: FrameCtx) {
         ok.style.transform = `scale(${lerp(0.6, 1, op).toFixed(3)})`;
       }
     }
-    el.style.boxShadow = glow(Math.max(win(t, a0, a0 + 1.4, 0.3), win(t, d0 + 0.6, d0 + 1.8, 0.3) * 0.6, win(t, e0 + 0.6, e0 + 2.0, 0.3)));
+    el.style.boxShadow = glow(Math.max(win(t, a0, a0 + 2.2, 0.3), win(t, d0 + 0.6, d0 + 1.8, 0.3) * 0.6, win(t, e0 + 0.6, e0 + 2.0, 0.3)));
     const lB = seg(t, d0 + 0.2, d0 + 0.6), lC = seg(t, e0 + 0.2, e0 + 0.6);
     const ra = g("ra" + i), rb = g("rb" + i), rk = g("rk" + i);
     if (ra) ra.style.opacity = (1 - lB).toFixed(3);
@@ -480,11 +543,37 @@ function applyFrame(real: number, ctx: FrameCtx) {
     pa.style.transform = `scale(${lerp(0.96, 1, seg(t, 8.4, 8.9)).toFixed(4)})`;
   }
   const pf = g("pfoot");
-  if (pf) pf.style.opacity = seg(t, 10.9, 11.3).toFixed(3);
+  if (pf) pf.style.opacity = seg(t, 9.2, 9.6).toFixed(3);
   {
-    const f = seg(t, 9.4, 11.4);
-    const W0 = [34, 26, 18, 22], W1 = [22, 24, 24, 30];
-    W0.forEach((w0, i) => { const e = g("pp" + i); if (e) e.style.width = lerp(w0, W1[i], f).toFixed(2) + "%"; });
+    // Cada cliente avanza por las etapas del pipeline; los contadores se actualizan.
+    const cnt = PIPE_BASE.slice(), lit = [0, 0, 0, 0, 0];
+    let cash = 18450000;
+    PIPE_FINAL.forEach((fin, i) => {
+      const a0 = 9.6 + 0.3 * i, a1 = a0 + 0.35 * fin, p = seg(t, a0, a1), sp = fin * p, k = Math.round(sp);
+      cnt[k]++;
+      const mv = seg(t, a0 - 0.2, a0);
+      lit[k] = Math.max(lit[k], mv * (p < 1 ? 1 : 1 - seg(t, a1 + 0.3, a1 + 0.7) * 0.4));
+      cash += PIPE_VALUE[i] * seg(t, a1 - 0.1, a1 + 0.4);
+      const d = g("pd" + i);
+      if (d) {
+        d.style.left = (((sp + 0.5) / 5) * 100).toFixed(2) + "%";
+        d.style.opacity = mv.toFixed(3);
+        d.style.transform = `translateX(${([-9, 0, 9][i] * p).toFixed(1)}px) translateY(${(-5 * Math.abs(Math.sin(Math.PI * sp))).toFixed(1)}px) scale(${(1 + 0.25 * win(t, a1 - 0.1, a1 + 0.5, 0.2)).toFixed(3)})`;
+      }
+    });
+    cnt.forEach((v, k) => {
+      const n = g("pn" + k), c = g("pk" + k);
+      if (n && n.textContent !== String(v)) n.textContent = String(v);
+      if (c) {
+        c.style.borderColor = lit[k] > 0.01 ? (k === 4 ? `rgba(47,158,88,${lit[k].toFixed(3)})` : `rgba(230,10,47,${(0.7 * lit[k]).toFixed(3)})`) : "transparent";
+        c.style.background = k === 4 && lit[k] > 0.01 ? "#E3F4E6" : "#F4F5F7";
+      }
+    });
+    const pc = g("pcash");
+    if (pc) {
+      const v = "$" + Math.round(cash).toLocaleString("es-CO");
+      if (pc.textContent !== v) pc.textContent = v;
+    }
     const cn = g("crmN");
     if (cn) {
       const v = String(125 + Math.min(3, Math.floor(seg(t, 9.8, 10.9) * 3.999)));
@@ -522,7 +611,7 @@ function applyFrame(real: number, ctx: FrameCtx) {
     if (sat) sat.style.boxShadow = ex > 0.01 ? `0 0 0 2px rgba(230,10,47,${(0.6 * ex).toFixed(3)}), 0 0 24px rgba(230,10,47,${(0.45 * ex).toFixed(3)})` : "none";
   }
 
-  // Cierre: MONSERRAT_AI → M·A·I
+  // Cierre: MONTSERRAT_AI → M·A·I
   const wm = g("wm"), sub = g("wmSub");
   const wmY = C.core[1] + (mob ? 30 : 50);
   if (wm) {
@@ -533,7 +622,7 @@ function applyFrame(real: number, ctx: FrameCtx) {
       const ws = WM.map((_, i) => g("w" + i));
       if (ws.every(Boolean) && ws[0]!.offsetWidth) {
         const lefts = ws.map((e) => e!.offsetLeft), widths = ws.map((e) => e!.offsetWidth);
-        const keepIdx = [0, 10, 11], gap = widths[0] * 0.08;
+        const keepIdx = KEEP_IDX, gap = widths[0] * 0.08;
         const tot = keepIdx.reduce((s2, i) => s2 + widths[i], 0) + gap * 2;
         let x0 = wm.offsetWidth / 2 - tot / 2;
         const tgt: Record<number, number> = {};
@@ -552,7 +641,7 @@ function applyFrame(real: number, ctx: FrameCtx) {
         el.style.opacity = "1";
         el.style.color = i === 0 ? "#FFFFFF" : mvw > 0.5 ? "#FFFFFF" : "#E60A2F";
       } else {
-        const f = seg(t, 18.0 + 0.03 * Math.abs(i - 5.5), 18.6 + 0.03 * Math.abs(i - 5.5));
+        const f = seg(t, 18.0 + 0.03 * Math.abs(i - WM_MID), 18.6 + 0.03 * Math.abs(i - WM_MID));
         el.style.opacity = (1 - f).toFixed(3);
         el.style.transform = `translateY(${(f * 18).toFixed(1)}px) scale(${(1 - 0.4 * f).toFixed(3)})`;
       }
@@ -564,7 +653,7 @@ function applyFrame(real: number, ctx: FrameCtx) {
   }
 
   // Subtítulos
-  const cps = [win(real, 0.2, 3.4, 0.3), win(real, 3.3, 9.2, 0.35), win(t, 8.4, 12.2, 0.35), win(ti, 12.2, 17.2, 0.35), win(ti, 17.3, 19.0, 0.35)];
+  const cps = [win(real, 0.2, 3.4, 0.3), win(real, 3.3, 12.6, 0.35), win(t, 8.4, 12.2, 0.35), win(ti, 12.2, 17.2, 0.35), win(ti, 17.3, 19.0, 0.35)];
   cps.forEach((o, j) => {
     const el = g("c" + j);
     if (el) {
@@ -611,7 +700,8 @@ export default function MaiDemo({ controls = true, captions = true }: { controls
   const clock = useRef({ acc: 0, paused: false, visible: true, reduce: false, layout: "desktop" as Layout, width: 1200 });
   const wmCache = useRef<FrameCtx["wm"]>({ pos: null, layout: null });
 
-  const r = useCallback((k: string) => (el: HTMLElement | null) => { els.current[k] = el; }, []);
+  // Acepta HTML y SVG: ambos tienen .style, que es lo único que escribe el reloj.
+  const r = useCallback((k: string) => (el: Element | null) => { els.current[k] = el as HTMLElement | null; }, []);
   const C = CFG[layout];
   const mob = layout === "mobile";
 
@@ -713,7 +803,7 @@ export default function MaiDemo({ controls = true, captions = true }: { controls
       <div
         ref={rootRef}
         role="img"
-        aria-label="Demostración (datos ficticios): llegan mensajes de WhatsApp, Instagram, web y correo; MAI los responde, los guarda en el CRM y los convierte en métricas de ventas, reservas y envíos."
+        aria-label="Demostración (datos ficticios): llegan mensajes de WhatsApp, Instagram, web y correo; MAI consulta tus sistemas, responde cada caso, mueve a cada cliente por el pipeline y lo convierte en métricas de ventas, reservas y envíos."
         style={{ position: "relative", width: "100%", aspectRatio: mob ? "390 / 720" : "1200 / 675", fontFamily: "var(--font-geist),'Geist',system-ui,sans-serif", color: "#12151B" }}
       >
         <div
@@ -726,6 +816,11 @@ export default function MaiDemo({ controls = true, captions = true }: { controls
           }}
         >
           <div ref={r("world")} style={{ position: "absolute", left: 0, top: 0, width: C.W, height: C.H, transformOrigin: "0 0", willChange: "transform" }}>
+            <svg width={C.W} height={C.H} style={{ position: "absolute", left: 0, top: 0, overflow: "visible", pointerEvents: "none", zIndex: 2 }}>
+              {ITEMS.map((_, i) => (
+                <path key={i} ref={r("l" + i)} pathLength={1} fill="none" stroke="#E60A2F" strokeWidth={2} strokeLinecap="round" style={{ display: "none" }} />
+              ))}
+            </svg>
             <span ref={r("pulse")} style={{ ...abs, borderRadius: "50%", border: "2px solid #E60A2F", pointerEvents: "none" }} />
             <span ref={r("wave")} style={{ ...abs, borderRadius: "50%", border: "2px solid rgba(230,10,47,0.7)", background: "radial-gradient(circle, rgba(230,10,47,0) 60%, rgba(230,10,47,0.12) 100%)", pointerEvents: "none" }} />
 
@@ -769,21 +864,26 @@ export default function MaiDemo({ controls = true, captions = true }: { controls
                   <span>CLIENTE</span><span>ETAPA</span><span>VALOR</span><span />
                 </div>
               )}
-              <div style={{ position: "absolute", left: 18, right: 18, bottom: 16, display: "grid", gap: 8 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "#6E7075" }}>
-                  <span>Embudo de ventas</span>
-                  <span ref={r("pfoot")} style={{ opacity: 0, color: "#2F7D3C" }}>+3 contactos guardados automáticamente</span>
+              <div style={{ position: "absolute", left: 18, right: 18, bottom: 16, display: "grid", gap: 10 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", fontSize: 11, color: "#6E7075" }}>
+                  <span style={{ fontFamily: MONO, letterSpacing: "0.06em" }}>PIPELINE</span>
+                  <span ref={r("pfoot")} style={{ opacity: 0 }}>
+                    Cobrado este mes{" "}
+                    <span ref={r("pcash")} style={{ fontSize: 14, fontWeight: 600, color: "#1E6B34" }}>$18.450.000</span>
+                  </span>
                 </div>
-                <div style={{ display: "flex", height: 10, borderRadius: 5, overflow: "hidden", gap: 2, background: "#EFF0F3" }}>
-                  {["#C9CBD0", "#3F7CC4", "#E60A2F", "#2F9E58"].map((c, i) => (
-                    <span key={c} ref={r("pp" + i)} style={{ background: c, width: "25%" }} />
+                <div style={{ position: "relative", display: "flex", gap: 4 }}>
+                  {PIPE.map((label, i) => (
+                    <div key={label} ref={r("pk" + i)} style={{ flex: 1, minWidth: 0, background: "#F4F5F7", border: "1.5px solid transparent", borderRadius: 10, padding: mob ? "7px 6px 5px" : "7px 12px", display: "flex", flexDirection: mob ? "column" : "row", justifyContent: "space-between", alignItems: mob ? "flex-start" : "baseline", gap: "0 6px" }}>
+                      <span style={{ fontSize: mob ? 9 : 12, color: "#4A4D53", whiteSpace: "nowrap" }}>{label}</span>
+                      <span ref={r("pn" + i)} style={{ fontSize: 15, fontWeight: 600, letterSpacing: "-0.02em" }}>0</span>
+                    </div>
                   ))}
-                </div>
-                <div style={{ display: "flex", gap: 14, fontSize: 11, color: "#4A4D53", flexWrap: "wrap" }}>
-                  <span><span style={{ color: "#C9CBD0" }}>●</span> Nuevo</span>
-                  <span><span style={{ color: "#3F7CC4" }}>●</span> En conversación</span>
-                  <span><span style={{ color: "#E60A2F" }}>●</span> Agendado</span>
-                  <span><span style={{ color: "#2F9E58" }}>●</span> Cliente</span>
+                  {ITEMS.map((it, i) => (
+                    <span key={i} ref={r("pd" + i)} style={{ position: "absolute", top: -11, left: 0, width: 16, height: 16, marginLeft: -8, borderRadius: "50%", background: PIPE_DOT[i], color: "#FFFFFF", border: "2px solid #FFFFFF", display: "grid", placeItems: "center", fontSize: 8, fontWeight: 700, opacity: 0, boxShadow: "0 4px 10px -4px rgba(0,0,0,0.5)" }}>
+                      {it.name[0]}
+                    </span>
+                  ))}
                 </div>
               </div>
             </div>
@@ -843,7 +943,14 @@ export default function MaiDemo({ controls = true, captions = true }: { controls
                         {MSGS[ITEM_MSG[i]][1]}
                       </span>
                     )}
-                    <span style={{ alignSelf: "flex-end", maxWidth: "94%", background: "#12151B", color: "#FFFFFF", borderRadius: "12px 12px 4px 12px", padding: "8px 12px", fontSize: 14, lineHeight: 1.35, minHeight: 34 }}>
+                    {it.tools.map((tl, j) => (
+                      <div key={j} ref={r(`tw${i}_${j}`)} style={{ display: mob && j > 0 ? "none" : "flex", alignItems: "center", gap: 8, opacity: 0, fontFamily: MONO, fontSize: 11, color: "#4A4D53", background: "#F4F5F7", border: "1px solid #E1E4E9", borderRadius: 8, padding: "4px 8px", transition: "border-color .2s ease" }}>
+                        <span style={{ width: 18, height: 16, borderRadius: 4, background: "#12151B", color: "#FFFFFF", display: "grid", placeItems: "center", fontSize: 9, flex: "none" }}>{tl[0]}</span>
+                        <span style={{ flex: 1, minWidth: 0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{tl[1]}</span>
+                        <span ref={r(`ts${i}_${j}`)} style={{ whiteSpace: "nowrap", color: "#8A8D93" }} />
+                      </div>
+                    ))}
+                    <span style={{ alignSelf: "flex-end", maxWidth: "94%", background: "#12151B", color: "#FFFFFF", borderRadius: "12px 12px 4px 12px", padding: mob ? "6px 10px" : "8px 12px", fontSize: mob ? 12.5 : 14, lineHeight: 1.35, minHeight: mob ? 28 : 34 }}>
                       <span ref={r("ty" + i)} style={{ letterSpacing: "0.15em" }}>●●●</span>
                       <span ref={r("an" + i)} />
                     </span>
@@ -887,11 +994,11 @@ export default function MaiDemo({ controls = true, captions = true }: { controls
             {/* Cierre */}
             <div ref={r("wm")} style={{ position: "absolute", left: 0, right: 0, top: 0, opacity: 0, display: "flex", justifyContent: "center", fontFamily: SYS, fontWeight: 700, fontSize: C.wmSize, letterSpacing: "-0.04em", lineHeight: 1, color: "#FFFFFF", whiteSpace: "nowrap", pointerEvents: "none" }}>
               {WM.map((ch, i) => (
-                <span key={`${layout}-w${i}`} ref={r("w" + i)} style={{ display: "inline-block", color: i >= 9 ? "#E60A2F" : "#FFFFFF" }}>{ch}</span>
+                <span key={`${layout}-w${i}`} ref={r("w" + i)} style={{ display: "inline-block", color: i >= RED_FROM ? "#E60A2F" : "#FFFFFF" }}>{ch}</span>
               ))}
             </div>
             <span ref={r("wmSub")} style={{ position: "absolute", left: 0, right: 0, top: 0, opacity: 0, textAlign: "center", fontSize: C.wmSub, color: "#C9CBD0" }}>
-              Tu asistente de automatización · MONSERRAT_AI
+              Tu asistente de automatización · {BRAND}
             </span>
 
             {/* MAI */}
@@ -903,9 +1010,9 @@ export default function MaiDemo({ controls = true, captions = true }: { controls
                 <span style={{ width: 9, height: 9, borderRadius: "50%", background: "#FFFFFF" }} />
                 <span style={{ width: 13, height: 13, borderRadius: "50%", background: "#FFFFFF" }} />
               </span>
-              <span ref={r("eyes")} style={{ position: "absolute", left: "50%", top: "50%", display: "flex", gap: 14, transform: "translate(-50%,-50%)", opacity: 0 }}>
-                <span ref={r("eyeL")} style={{ width: 10, height: 17, borderRadius: 999, background: "#FFFFFF", boxShadow: "0 0 10px rgba(255,255,255,0.7)" }} />
-                <span ref={r("eyeR")} style={{ width: 10, height: 17, borderRadius: 999, background: "#FFFFFF", boxShadow: "0 0 10px rgba(255,255,255,0.7)" }} />
+              <span ref={r("eyes")} style={{ position: "absolute", left: "50%", top: "50%", display: "flex", gap: 12, transform: "translate(-50%,-50%)", opacity: 0 }}>
+                <span ref={r("eyeL")} style={{ width: 13, height: 19, borderRadius: "50%", background: "#FFFFFF", boxShadow: "0 0 10px rgba(255,255,255,0.7)" }} />
+                <span ref={r("eyeR")} style={{ width: 13, height: 19, borderRadius: "50%", background: "#FFFFFF", boxShadow: "0 0 10px rgba(255,255,255,0.7)" }} />
               </span>
               <span ref={r("status")} style={{ position: "absolute", left: "50%", top: "calc(100% + 64px)", transform: "translateX(-50%)", whiteSpace: "nowrap", background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", color: "#FFFFFF", borderRadius: 999, padding: "7px 14px", fontSize: 13, fontWeight: 500 }} />
               <span ref={r("badge")} style={{ position: "absolute", top: -10, right: -10, minWidth: 30, height: 30, padding: "0 8px", borderRadius: 999, background: "#FFFFFF", color: "#E60A2F", fontSize: 14, fontWeight: 600, display: "grid", placeItems: "center", opacity: 0, boxShadow: "0 6px 16px -6px rgba(0,0,0,0.5)" }}>0</span>

@@ -45,10 +45,10 @@ export default function Header({ innerPage = false }: { innerPage?: boolean }) {
         <a
           href={`${prefix}#inicio`}
           className="wordmark"
-          aria-label="MONSERRAT_AI, inicio"
+          aria-label="MONTSERRAT_AI, inicio"
         >
           <MaiMark width={28} height={28} />
-          <span>MONSERRAT_AI</span>
+          <span>MONTSERRAT_AI</span>
         </a>
         <div className="desktop-nav">
           {links.map(([label, id]) => (

@@ -40,7 +40,7 @@ export default function Hero() {
     return () => observer.disconnect();
   }, []);
 
-  // "monserrat" se expande en horizontal al bajar (--wm-p de 0 a 1).
+  // "montserrat" se expande en horizontal al bajar (--wm-p de 0 a 1).
   // Un listener pasivo + requestAnimationFrame; solo escribe una variable CSS.
   const watermark = useRef<HTMLSpanElement>(null);
   useEffect(() => {
@@ -100,7 +100,7 @@ export default function Hero() {
         </div>
         <div className="hero-demo" ref={host}>
           <span className="hero-watermark" aria-hidden="true" ref={watermark}>
-            monserrat
+            montserrat
           </span>
           <div className="hero-demo-inner">
             {visible ? <MaiDemo /> : <DemoPlaceholder />}

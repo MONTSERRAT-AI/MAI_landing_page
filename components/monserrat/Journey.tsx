@@ -269,7 +269,7 @@ export default function Journey({ children }: { children?: ReactNode }) {
               <div className="journey-app-bar">
                 <span className="dashboard-brand">
                   <MaiMark width={16} height={16} />
-                  MONSERRAT_AI
+                  MONTSERRAT_AI
                 </span>
                 <span className="demo-tag">DATOS DEMO</span>
               </div>

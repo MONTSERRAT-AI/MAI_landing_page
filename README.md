@@ -1,4 +1,4 @@
-# MONSERRAT_AI
+# MONTSERRAT_AI
 
 Landing en español implementada con Next.js App Router, React y TypeScript, a partir del prototipo entregado en `Landing Monserrat AI.zip`.
 
@@ -34,7 +34,7 @@ npm start
 - `styles/tokens.css`: colores y radios de la marca.
 - `app/globals.css`: estilos; el bloque “Landing v2” al final contiene las secciones nuevas.
 - `components/monserrat/`: cabecera, hero, secciones, recorrido, marketing y formulario.
-- `components/monserrat/MaiDemo.tsx`: datos ficticios y línea de tiempo de la animación (~32 s).
+- `components/monserrat/MaiDemo.tsx`: datos ficticios y línea de tiempo de la animación (~36 s).
 - `public/channels/*.svg`: iconos de canales (generados desde `simple-icons`). Los usa la sección Plataforma.
 - `app/layout.tsx`, `app/opengraph-image.tsx` y `app/icon.svg`: metadatos e identidad para compartir.
 

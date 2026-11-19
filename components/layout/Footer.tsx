@@ -11,7 +11,7 @@ export const Footer = () => (
       <div className="footer-top">
         <Link href="/#inicio" className="wordmark">
           <MaiMark width={24} height={24} />
-          <span itemProp="name">MONSERRAT_AI</span>
+          <span itemProp="name">MONTSERRAT_AI</span>
         </Link>
         <nav className="footer-links" aria-label="Navegación del pie de página">
           <Link href="/#soluciones">Soluciones</Link>

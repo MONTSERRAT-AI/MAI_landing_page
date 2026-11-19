@@ -235,7 +235,7 @@ export function PlatformBlock() {
         <div className="dashboard-sidebar">
           <span className="dashboard-brand">
             <MaiMark width={18} height={18} />
-            MONSERRAT_AI
+            MONTSERRAT_AI
           </span>
           {["Inbox", "Clientes", "Agenda", "Pipeline", "Resultados"].map(
             (t, i) => (
