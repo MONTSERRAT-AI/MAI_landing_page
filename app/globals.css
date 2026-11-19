@@ -1775,17 +1775,17 @@ h3 {
   position: relative;
   margin-top: clamp(24px, 3vw, 36px);
 }
-/* La demo es el centro: más ancha y con "monserrat" de borde a borde. */
+/* La demo es el centro: más ancha y con "montserrat" de borde a borde. */
 .hero-demo-inner {
   max-width: 1240px;
 }
-/* "monserrat": la mitad superior asoma nítida sobre la demo (A) y se
+/* "montserrat": la mitad superior asoma nítida sobre la demo (A) y se
    expande en horizontal al hacer scroll con --wm-p de 0 a 1 (C). */
 .hero-demo {
-  /* La palabra mide 4.115 veces su tamaño de letra: se calcula para dejar
+  /* "montserrat" mide 4.406 veces su tamaño de letra: se calcula para dejar
      un margen pequeño a cada lado. */
   --wm-margin: clamp(12px, 2vw, 32px);
-  --wm-size: calc((100vw - 2 * var(--wm-margin)) / 4.115);
+  --wm-size: calc((100vw - 2 * var(--wm-margin)) / 4.406);
   padding-top: calc(var(--wm-size) * 0.27);
 }
 .hero-watermark {

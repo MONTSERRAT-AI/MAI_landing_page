@@ -17,9 +17,9 @@ export const SITE_URL = (
   "https://montserratai.com.co"
 ).replace(/\/$/, "");
 
-export const SITE_NAME = "MONSERRAT_AI";
+export const SITE_NAME = "MONTSERRAT_AI";
 export const SITE_TITLE =
-  "MONSERRAT_AI · Automatización con IA para atención, reservas y seguimiento";
+  "MONTSERRAT_AI · Automatización con IA para atención, reservas y seguimiento";
 export const SITE_DESCRIPTION =
   "La IA hace lo repetitivo y tu equipo, lo importante. Conectamos tus mensajes, tu agenda y tus herramientas con soluciones de IA adaptadas a tu operación.";
 

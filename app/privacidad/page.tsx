@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import { Footer } from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
-  title: "Política de privacidad · MONSERRAT_AI",
+  title: "Política de privacidad · MONTSERRAT_AI",
   description:
-    "Cómo MONSERRAT_AI recoge, usa y protege los datos que envías por el formulario de contacto.",
+    "Cómo MONTSERRAT_AI recoge, usa y protege los datos que envías por el formulario de contacto.",
   alternates: { canonical: "/privacidad" },
 };
 

@@ -175,7 +175,7 @@ export const process = [
 export const engagement = {
   uses: {
     title: "Lo que usas",
-    text: "La plataforma de MONSERRAT_AI con los módulos de tu plan: Inbox, clientes, pipeline, agenda, catálogo, ventas y cobros, presencia y marketing, y resultados.",
+    text: "La plataforma de MONTSERRAT_AI con los módulos de tu plan: Inbox, clientes, pipeline, agenda, catálogo, ventas y cobros, presencia y marketing, y resultados.",
   },
   weDo: {
     title: "Lo que hacemos nosotros",

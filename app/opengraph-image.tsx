@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "MONSERRAT_AI. Menos tareas. Más negocio.";
+export const alt = "MONTSERRAT_AI. Menos tareas. Más negocio.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -49,7 +49,7 @@ export default function OpenGraphImage() {
             }}
           />
         </div>
-        <div style={{ fontSize: 26, fontWeight: 600 }}>MONSERRAT_AI</div>
+        <div style={{ fontSize: 26, fontWeight: 600 }}>MONTSERRAT_AI</div>
       </div>
       <div
         style={{
