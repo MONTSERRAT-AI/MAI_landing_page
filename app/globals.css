@@ -1782,7 +1782,10 @@ h3 {
 /* "monserrat": la mitad superior asoma nítida sobre la demo (A) y se
    expande en horizontal al hacer scroll con --wm-p de 0 a 1 (C). */
 .hero-demo {
-  --wm-size: 24.6vw;
+  /* La palabra mide 4.115 veces su tamaño de letra: se calcula para dejar
+     un margen pequeño a cada lado. */
+  --wm-margin: clamp(12px, 2vw, 32px);
+  --wm-size: calc((100vw - 2 * var(--wm-margin)) / 4.115);
   padding-top: calc(var(--wm-size) * 0.27);
 }
 .hero-watermark {
@@ -1790,7 +1793,8 @@ h3 {
   font-size: var(--wm-size);
   white-space: nowrap;
   transform-origin: 50% 0;
-  transform: translate(-50%, calc(var(--wm-p, 0) * 14%))
+  /* -0.033em compensa que la "m" tiene más espacio lateral que la "t". */
+  transform: translate(calc(-50% - 0.033em), calc(var(--wm-p, 0) * 14%))
     scaleX(calc(1 + var(--wm-p, 0) * 0.16));
   will-change: transform;
 }
